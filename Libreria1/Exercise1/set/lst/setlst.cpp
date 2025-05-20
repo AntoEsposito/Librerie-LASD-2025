@@ -329,6 +329,7 @@ SetLst<Data>::Node * SetLst<Data>::Find(const Data &data) const
 template <typename Data>
 SetLst<Data>::Node * SetLst<Data>::GetAt(Node *start, const ulong n) const
 {
+    // this function is only used by Find, so no need to check if n is valid
     for (ulong i = 0; i < n && start != nullptr ; i++)
     {
         start = start -> nextNode;

@@ -1,4 +1,4 @@
-
+#include "test.hpp"
 #include "myvectorlist.cpp"
 #include "myset.cpp"
 
@@ -18,10 +18,11 @@ void mytest()
   uint stestnum = 0, stesterr = 0;
 
   loctestnum = 0; loctesterr = 0;
-  FullTest(loctestnum, loctesterr);
+  MyFullTestA(loctestnum, loctesterr);
   stestnum += loctestnum; stesterr += loctesterr;
 
   loctestnum = 0; loctesterr = 0;
+  // MyFullTestB(loctestnum, loctesterr);
   stestnum += loctestnum; stesterr += loctesterr;
 
   cout << endl << "MyTest (Errors/Tests: " << stesterr << "/" << stestnum << ")";

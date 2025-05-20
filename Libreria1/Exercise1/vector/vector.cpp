@@ -133,22 +133,19 @@ const Data & Vector<Data>::Back() const
 template <typename Data>
 Data & Vector<Data>::operator[](const ulong index)
 {
-    if (index >= size) throw std::out_of_range("Vector: Invalid index");
-    else return elements[index];
+    return const_cast<Data&>(static_cast<const Vector<Data> *>(this)->operator[](index));
 }
 
 template <typename Data>
 Data & Vector<Data>::Front()
 {
-    if (Empty()) throw std::length_error("The Vector is empty");
-    else return elements[0];
+    return const_cast<Data&>(static_cast<const Vector<Data> *>(this)->Front());
 }
 
 template <typename Data>
 Data & Vector<Data>::Back()
 {
-    if (Empty()) throw std::length_error("The Vector is empty");
-    else return elements[size-1];
+    return const_cast<Data&>(static_cast<const Vector<Data> *>(this)->Back());
 }
 
 

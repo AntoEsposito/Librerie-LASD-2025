@@ -331,43 +331,28 @@ Data List<Data>::BackNRemove()
 template <typename Data>
 Data & List<Data>::operator[](const ulong index)
 {
-    if (index >= size) throw std::out_of_range("Invalid index");
-
-    if (index == size) return Back();
-    else
-    {
-        Node *tmp = head;
-        for (ulong i = 0; i < index; i++) tmp = tmp -> nextNode;
-        return tmp -> element;
-    }
+    return const_cast<Data &>(static_cast<const List<Data> *>(this)->operator[](index));
 }
 
 template <typename Data>
 Data & List<Data>::Front()
 {
-    if (Empty()) throw std::length_error("The list is empty.");
-    return head -> element;
+    return const_cast<Data &>(static_cast<const List<Data> *>(this)->Front());
 }
 
 template <typename Data>
 Data & List<Data>::Back()
 {
-    if (Empty()) throw std::length_error("The list is empty.");
-    return tail -> element;
+    return const_cast<Data &>(static_cast<const List<Data> *>(this)->Back());
 }
 
 template <typename Data>
 const Data & List<Data>::operator[](const ulong index) const
 {
-    if (index >= size) throw std::out_of_range("Invalid index");
-
-    if (index == size) return Back();
-    else
-    {
-        Node *tmp = head;
-        for (ulong i = 0; i < index; i++) tmp = tmp -> nextNode;
-        return tmp -> element;
-    }
+    if (index >= size) throw std::out_of_range("Invalid index.");
+    Node *tmp = head;
+    for (ulong i = 0; i < index; i++) tmp = tmp -> nextNode;
+    return tmp -> element;
 }
 
 template <typename Data>
