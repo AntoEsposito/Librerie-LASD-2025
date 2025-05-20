@@ -128,7 +128,7 @@ void testVectorInt(uint & testnum, uint & testerr) {
   catch (...) {
     loctestnum++; 
     loctesterr++;
-    cout << endl << "Unmanaged errors!" << endl;
+    cout << endl << "Unmanaged error!" << endl;
   }
   
   cout << "End of Vector<int> Test! (Errors/Tests: "<< loctesterr << "/" << loctestnum << ")" << endl;
@@ -244,7 +244,7 @@ void testVectorDouble(uint & testnum, uint & testerr) {
   }
   catch (...) {
     loctestnum++; loctesterr++;
-    cout << endl << "Unmanaged errors!" << endl;
+    cout << endl << "Unmanaged error!" << endl;
   }
   cout << "End of Vector<double> Test! (Errors/Tests: "<< loctesterr << "/" << loctestnum << ")" << endl;
   testnum += loctestnum;
@@ -337,7 +337,7 @@ void testVectorString(uint & testnum, uint & testerr) {
   catch (...) {
     loctestnum++;
     loctesterr++;
-    cout << endl << "Unmanaged errors!" << endl;
+    cout << endl << "Unmanaged error!" << endl;
   }
   cout << "End of Vector<string> Test! (Errors/Tests: "<< loctesterr << "/" << loctestnum << ")" << endl;
   testnum += loctestnum;
@@ -366,12 +366,9 @@ void testListInt(uint & testnum, uint & testerr) {
     Size(loctestnum, loctesterr, lst, true, 3);
     GetBack(loctestnum, loctesterr, lst, true, 10);
 
-    Size(loctestnum, loctesterr, lst, true, 2);
-    GetBack(loctestnum, loctesterr, lst, true, 5);
-
     InsertAtBack(loctestnum, loctesterr, lst, true, 5);
-    InsertAtBack(loctestnum, loctesterr, lst, true, 5);
-    Size(loctestnum, loctesterr, lst, true, 4);
+    InsertAtFront(loctestnum, loctesterr, lst, true, 5);
+    Size(loctestnum, loctesterr, lst, true, 5);
 
     Exists(loctestnum, loctesterr, lst, true, 5);
 
@@ -391,7 +388,7 @@ void testListInt(uint & testnum, uint & testerr) {
   }
   catch (...) {
     loctestnum++; loctesterr++;
-    cout << endl << "Unmanaged errors! " << endl;
+    cout << endl << "Unmanaged error! " << endl;
   }
   cout << "End of List<int> Test! (Errors/Tests: " << loctesterr << "/" << loctestnum << ")" << endl;
   testnum += loctestnum;
@@ -417,12 +414,9 @@ void testListDouble(uint & testnum, uint & testerr) {
     Size(loctestnum, loctesterr, lst, true, 3);
     GetBack(loctestnum, loctesterr, lst, true, 10.5);
 
-    Size(loctestnum, loctesterr, lst, true, 2);
-    GetBack(loctestnum, loctesterr, lst, true, 5.1);
-
     InsertAtBack(loctestnum, loctesterr, lst, true, 5.1);
     InsertAtBack(loctestnum, loctesterr, lst, true, 5.1);
-    Size(loctestnum, loctesterr, lst, true, 4);
+    Size(loctestnum, loctesterr, lst, true, 5);
 
     Exists(loctestnum, loctesterr, lst, true, 5.1);
 
@@ -442,7 +436,7 @@ void testListDouble(uint & testnum, uint & testerr) {
   }
   catch (...) {
     loctestnum++; loctesterr++;
-    cout << endl << "Unmanaged errors! " << endl;
+    cout << endl << "Unmanaged error! " << endl;
   }
   cout << "End of List<double> Test! (Errors/Tests: " << loctesterr << "/" << loctestnum << ")" << endl;
   testnum += loctestnum;
@@ -484,9 +478,9 @@ void testListString(uint & testnum, uint & testerr) {
     Size(loctestnum, loctesterr, lst, true, 4);
 
     FrontNRemove(loctestnum, loctesterr, lst, true, string("C"));
-    BackNRemove(loctestnum, loctesterr, lst, true, string("B"));
-    FrontNRemove(loctestnum, loctesterr, lst, true, string("A"));
     BackNRemove(loctestnum, loctesterr, lst, true, string("D"));
+    FrontNRemove(loctestnum, loctesterr, lst, true, string("A"));
+    BackNRemove(loctestnum, loctesterr, lst, true, string("B"));
     Empty(loctestnum, loctesterr, lst, true);
 
     RemoveFromFront(loctestnum, loctesterr, lst, false);
@@ -538,7 +532,7 @@ void testListString(uint & testnum, uint & testerr) {
   }
   catch (...) {
     loctestnum++; loctesterr++;
-    cout << endl << "Unmanaged errors! " << endl;
+    cout << endl << "Unmanaged error! " << endl;
   }
   cout << "End of List<string> Test! (Errors/Tests: " << loctesterr << "/" << loctestnum << ")" << endl;
   testnum += loctestnum;
@@ -590,7 +584,7 @@ void testVectorListInt(uint & testnum, uint & testerr) {
   }
   catch (...) {
     loctestnum++; loctesterr++;
-    cout << endl << "Unmanaged errors! " << endl;
+    cout << endl << "Unmanaged error! " << endl;
   }
   cout << "End of Vector/List<int> Test! (Errors/Tests: " << loctesterr << "/" << loctestnum << ")" << endl;
   testnum += loctestnum;
@@ -637,7 +631,7 @@ void testVectorListDouble(uint & testnum, uint & testerr) {
   }
   catch (...) {
     loctestnum++; loctesterr++;
-    cout << endl << "Unmanaged errors! " << endl;
+    cout << endl << "Unmanaged error! " << endl;
   }
   cout << "End of Vector/List<double> Test! (Errors/Tests: " << loctesterr << "/" << loctestnum << ")" << endl;
   testnum += loctestnum;
@@ -685,7 +679,7 @@ void testVectorListString(uint & testnum, uint & testerr) {
   }
   catch (...) {
     loctestnum++; loctesterr++;
-    cout << endl << "Unmanaged errors! " << endl;
+    cout << endl << "Unmanaged error! " << endl;
   }
   cout << "End of Vector/List<string> Test! (Errors/Tests: " << loctesterr << "/" << loctestnum << ")" << endl;
   testnum += loctestnum;
@@ -733,5 +727,5 @@ void MyFullTestA(unsigned int & testnum, unsigned int & testerr){
 
     testnum += loctestnum;
     testerr += loctesterr;
-    cout << endl << "My full test for Vectors and Lists (Errors/Tests: " << testerr << "/" << testnum << ")" << endl;
+    cout << endl << "My test (Vector and Lists) (Errors/Tests: " << testerr << "/" << testnum << ")" << endl;
 }

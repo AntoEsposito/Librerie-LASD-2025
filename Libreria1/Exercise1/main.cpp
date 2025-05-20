@@ -11,7 +11,7 @@
 
 int main() {
   std::cout << "LASD Libraries 2025" << std::endl;
-  // lasdtest();
+  lasdtest();
   mytest();
   return 0;
 }

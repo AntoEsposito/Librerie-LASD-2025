@@ -362,13 +362,15 @@ ulong SetVec<Data>::BinarySearch(const Data &data) const noexcept
 template <typename Data>
 void SetVec<Data>::Expand()
 {
+    ulong oldCapacity = capacity;
     if (capacity == 0) capacity = 10;
     else capacity *= 2;
 
-    Data * newElements = new Data[capacity]();
+    Data *oldElements = elements;
+    Data *newElements = new Data[capacity]();
     for (ulong i = 0; i < size; i++)
     {
-        newElements[i] = operator[](i);
+        newElements[i] = oldElements[(head + i) % oldCapacity];
     }
     delete[] elements;
     elements = newElements;
@@ -378,13 +380,16 @@ void SetVec<Data>::Expand()
 template <typename Data>
 void SetVec<Data>::Reduce()
 {
+    ulong oldCapacity = capacity;
+    Data* oldElements = elements;
+
     if (size == 0) capacity = 10;
     else capacity = size * 2;
 
-    Data * newElements = new Data[capacity]();
+    Data* newElements = new Data[capacity]();
     for (ulong i = 0; i < size; i++)
     {
-        newElements[i] = operator[](i);
+        newElements[i] = oldElements[(head + i) % oldCapacity];
     }
     delete[] elements;
     elements = newElements;

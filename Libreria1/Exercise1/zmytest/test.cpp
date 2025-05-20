@@ -12,7 +12,7 @@ using namespace std;
 
 void mytest() 
 {
-  cout << endl << "~*~#~*~ Welcome to my LASD Test Suite ~*~#~*~ " << endl;
+  cout << endl << "~*~#~*~ Welcome to my LASD Test Suite! ~*~#~*~ " << endl;
 
   uint loctestnum, loctesterr;
   uint stestnum = 0, stesterr = 0;
@@ -22,7 +22,7 @@ void mytest()
   stestnum += loctestnum; stesterr += loctesterr;
 
   loctestnum = 0; loctesterr = 0;
-  // MyFullTestB(loctestnum, loctesterr);
+  MyFullTestB(loctestnum, loctesterr);
   stestnum += loctestnum; stesterr += loctesterr;
 
   cout << endl << "MyTest (Errors/Tests: " << stesterr << "/" << stestnum << ")";
