@@ -1,4 +1,3 @@
-
 namespace lasd {
 
 /* ************************************************************************** */
@@ -7,6 +6,8 @@ namespace lasd {
 template <typename Data>
 SetVec<Data>::SetVec(const TraversableContainer<Data> &traversableC)
 {
+    capacity = 10;
+    vector.Resize(capacity);
     traversableC.Traverse([this] (const Data &data)
     {
         Insert(data);
@@ -16,6 +17,8 @@ SetVec<Data>::SetVec(const TraversableContainer<Data> &traversableC)
 template <typename Data>
 SetVec<Data>::SetVec(MappableContainer<Data> &&mappableC) noexcept
 {
+    capacity = 10;
+    vector.Resize(capacity);
     mappableC.Map([this] (Data &data)
     {
         Insert(std::move(data));
@@ -26,27 +29,17 @@ SetVec<Data>::SetVec(MappableContainer<Data> &&mappableC) noexcept
 // copy & move constructors
 
 template <typename Data>
-SetVec<Data>::SetVec(const SetVec<Data> &newSet)
+SetVec<Data>::SetVec(const SetVec<Data> &newSet): vector(newSet.vector), head(newSet.head), capacity(newSet.capacity)
 {
-    head = 0;
     size = newSet.size;
-    capacity = newSet.capacity;
-
-    delete [] elements;
-    elements = new Data[capacity];
-    for (ulong i = 0; i < size; i++)
-    {
-        elements[i] = newSet[i];
-    }
 }
 
 template <typename Data>
-SetVec<Data>::SetVec(SetVec<Data> &&newSet) noexcept
+SetVec<Data>::SetVec(SetVec<Data> &&newSet) noexcept: vector(std::move(newSet.vector))
 {
+    std::swap(size, newSet.size);
     std::swap(head, newSet.head);
     std::swap(capacity, newSet.capacity);
-    std::swap(size, newSet.size);
-    std::swap(elements, newSet.elements);
 }
 
 
@@ -57,16 +50,10 @@ SetVec<Data> & SetVec<Data>::operator=(const SetVec<Data> &setToCopy)
 {
     if (this != &setToCopy)
     {
+        vector = setToCopy.vector;
         size = setToCopy.size;
+        head = setToCopy.head;
         capacity = setToCopy.capacity;
-        Data *newElements = new Data[capacity];
-        for (ulong i = 0; i < size; i++)
-        {
-            newElements[i] = setToCopy[i];
-        }
-        delete [] elements;
-        elements = newElements;
-        head = 0;
     }
     return *this;
 }
@@ -76,21 +63,25 @@ SetVec<Data> & SetVec<Data>::operator=(SetVec<Data> &&setToMove) noexcept
 {
     if (this != &setToMove)
     {
-        std::swap(capacity, setToMove.capacity);
+        std::swap(vector, setToMove.vector);
         std::swap(size, setToMove.size);
-        std::swap(elements, setToMove.elements);
         std::swap(head, setToMove.head);
+        std::swap(capacity, setToMove.capacity);
     }
     return *this;
 }
 
 
-// comparison oeprators
+// comparison operators
 
 template <typename Data>
 bool SetVec<Data>::operator==(const SetVec<Data> &set) const noexcept
 {
-    return LinearContainer<Data>::operator==(set);
+    if(size != set.size) return false;
+    
+    for(ulong i = 0; i < size; i++) {if(operator[](i) != set[i]) return false;}
+    
+    return true;
 }
 
 template <typename Data>
@@ -100,50 +91,62 @@ bool SetVec<Data>::operator!=(const SetVec<Data> &set) const noexcept
 }
 
 
-// inhterited methods (from OrderedDictionaryContainer)
+// inherited methods (from OrderedDictionaryContainer)
 
 template<typename Data>
 const Data & SetVec<Data>::Min() const
 {
     if (size == 0) throw std::length_error("The set is empty");
-    else return elements[head];
+    return operator[](0);
 }
 
 template<typename Data>
 const Data SetVec<Data>::MinNRemove()
 {
-    Data toReturn = Min();
+    Data min = Min();
     head = (head + 1) % capacity;
-    if (--size < capacity / 4) Reduce();
-    return toReturn;
+    size--;
+    
+    if (size < capacity / 4) Reduce();
+    
+    return min;
 }
 
 template<typename Data>
 void SetVec<Data>::RemoveMin()
 {
+    if (size == 0) throw std::length_error("The set is empty");
+    
     head = (head + 1) % capacity;
-    if (--size < capacity / 4) Reduce();
+    size--;
+    
+    if (size < capacity / 4) Reduce();
 }
 
 template<typename Data>
 const Data & SetVec<Data>::Max() const
 {
     if (size == 0) throw std::length_error("The set is empty");
-    else return operator[](size - 1);
+    return operator[](size - 1);
 }
 
 template<typename Data>
 const Data SetVec<Data>::MaxNRemove()
 {
-    Data toReturn = Max();
-    if (--size < capacity / 4) Reduce();
-    return toReturn;
+    Data max = Max();
+    size--;
+    
+    if (size < capacity / 4) Reduce();
+    return max;
 }
 
 template<typename Data>
 void SetVec<Data>::RemoveMax()
 {
-    if (--size < capacity / 4) Reduce();
+    if (size == 0) throw std::length_error("The set is empty");
+    size--;
+    
+    if (size < capacity / 4) Reduce();
 }
 
 template<typename Data>
@@ -161,10 +164,11 @@ const Data SetVec<Data>::PredecessorNRemove(const Data &data)
     if (position == 0 || size == 0) throw std::length_error("Predecessor does not exist");
     Data toReturn = operator[](position - 1);
     
-    if ((position - 1) > (size - position)) this->RemoveRightShift(position - 1);
-    else this->RemoveLeftShift(position - 1);
+    if ((position - 1) > (size - position)) RemoveRightShift(position - 1);
+    else RemoveLeftShift(position - 1);
     
     size--;
+    
     if (size < capacity / 4) Reduce();
     return toReturn;  
 }
@@ -175,10 +179,11 @@ void SetVec<Data>::RemovePredecessor(const Data &data)
     ulong position = BinarySearch(data);
     if (position == 0 || size == 0) throw std::length_error("Predecessor does not exist");
 
-    if ((position - 1) > (size - position)) this->RemoveRightShift(position - 1);
-    else this->RemoveLeftShift(position - 1);
+    if ((position - 1) > (size - position)) RemoveRightShift(position - 1);
+    else RemoveLeftShift(position - 1);
     
     size--;
+    
     if (size < capacity / 4) Reduce();
 }
 
@@ -189,10 +194,9 @@ const Data & SetVec<Data>::Successor(const Data &data) const
     if (position > size-1 || size == 0) throw std::length_error("Successor does not exist");
     else
     {
-        if (operator[](position) == data && position < size - 1) return operator[](position+1);
+        if (operator[](position) == data && position < size - 1) return operator[](position + 1);
         else return operator[](position);
     } 
-    throw std::length_error("Successor does not exist");
 }
 
 template<typename Data>
@@ -206,11 +210,13 @@ const Data SetVec<Data>::SuccessorNRemove(const Data &data)
     else succIndex = position;
     Data toReturn = operator[](succIndex);
 
-    if (succIndex > (size - succIndex - 1)) this->RemoveRightShift(succIndex);
-    else this->RemoveLeftShift(succIndex);
+    if (succIndex > (size - succIndex - 1)) RemoveRightShift(succIndex);
+    else RemoveLeftShift(succIndex);
 
     size--;
+    
     if (size < capacity / 4) Reduce();
+    
     return toReturn;
 }
 
@@ -224,16 +230,16 @@ void SetVec<Data>::RemoveSuccessor(const Data &data)
     if (operator[](position) == data && position < size - 1) succIndex = position + 1;
     else succIndex = position;
 
-    if (succIndex > (size - succIndex - 1)) this->RemoveRightShift(succIndex);
-    else this->RemoveLeftShift(succIndex);
+    if (succIndex > (size - succIndex - 1)) RemoveRightShift(succIndex);
+    else RemoveLeftShift(succIndex);
 
     size--;
+    
     if (size < capacity / 4) Reduce();
 }
 
 
-
-// intherited methods (from DictionaryContainer)
+// inherited methods (from DictionaryContainer)
 
 template <typename Data>
 bool SetVec<Data>::Insert(const Data &data)
@@ -243,10 +249,12 @@ bool SetVec<Data>::Insert(const Data &data)
     else
     {
         if (size == capacity) Expand();
-        if (position > size - position) this -> InsertRightShift(position);
-        else this -> InsertLeftShift(position);
-        elements[(head + position) % capacity] = data;
-        size ++;
+        
+        if (position > size - position) InsertRightShift(position);
+        else InsertLeftShift(position);
+        
+        vector[(head + position) % capacity] = data;
+        size++;
         return true;
     }
 }
@@ -259,10 +267,12 @@ bool SetVec<Data>::Insert(Data &&data)
     else
     {
         if (size == capacity) Expand();
-        else if (position > size - position) this -> InsertRightShift(position);
-        else this -> InsertLeftShift(position);
-        elements[(head + position) % capacity] = std::move(data);
-        size ++;
+        
+        if (position > size - position) InsertRightShift(position);
+        else InsertLeftShift(position);
+        
+        vector[(head + position) % capacity] = std::move(data);
+        size++;
         return true;
     }
 }
@@ -274,10 +284,13 @@ bool SetVec<Data>::Remove(const Data &data)
     if (position == size || operator[](position) != data) return false;
     else
     {
-        if (position > size - position - 1) this -> RemoveRightShift(position);
-        else this -> RemoveLeftShift(position);
+        if (position > size - position - 1) RemoveRightShift(position);
+        else RemoveLeftShift(position);
+        
         size--;
+        
         if (size < capacity / 4) Reduce();
+        
         return true;  
     }
 }
@@ -289,8 +302,7 @@ template <typename Data>
 const Data & SetVec<Data>::operator[](const ulong index) const
 {
     if (index >= size) throw std::out_of_range("Set: invalid index");
-
-    return elements[(head + index) % capacity];
+    return vector[(head + index) % capacity];
 }
 
 
@@ -310,11 +322,11 @@ bool SetVec<Data>::Exists(const Data &data) const noexcept
 template <typename Data>
 void SetVec<Data>::Clear()
 {
-    delete [] elements;
-    elements = nullptr;
+    vector.Clear();
+    vector.Resize(10); // Reset to default size
     size = 0;
     head = 0;
-    capacity = 0;
+    capacity = 10;
 }
 
 
@@ -323,21 +335,11 @@ void SetVec<Data>::Clear()
 template <typename Data>
 void SetVec<Data>::Resize(const ulong newSize)
 {
-    if (newSize == 0) Clear();
-    else if (size != newSize)
+    if (newSize < size) size = newSize;
+    
+    else if (newSize > size)
     {
-        while (newSize > capacity) Expand();
-
-        ulong smallestSize = std::min(newSize, size); 
-        Data *tmpElements = new Data[newSize]();
-        for (ulong i = 0; i < smallestSize; i++)
-        {
-            tmpElements[i] = std::move(operator[](i));
-        }
-        std::swap(elements, tmpElements);
-        delete[] tmpElements;
-        size = newSize;
-        head = 0;
+        while (capacity < newSize) Expand();
     }
 }
 
@@ -359,80 +361,67 @@ ulong SetVec<Data>::BinarySearch(const Data &data) const noexcept
     return left; // either the position of the data or the position where it should be
 }
 
+// Expand the vector by doubling its size
+
 template <typename Data>
 void SetVec<Data>::Expand()
 {
     ulong oldCapacity = capacity;
     if (capacity == 0) capacity = 10;
     else capacity *= 2;
-
-    Data *oldElements = elements;
-    Data *newElements = new Data[capacity]();
-    for (ulong i = 0; i < size; i++)
-    {
-        newElements[i] = std::move(oldElements[(head + i) % oldCapacity]);
-    }
-    delete[] elements;
-    elements = newElements;
+    
+    Vector<Data> newVector(capacity);
+    for (ulong i = 0; i < size; i++) {newVector[i] = std::move(vector[(head + i) % oldCapacity]);}
+    
+    vector = std::move(newVector);
     head = 0;
 }
 
 template <typename Data>
 void SetVec<Data>::Reduce()
 {
-    ulong oldCapacity = capacity;
-    Data* oldElements = elements;
-
-    if (size == 0) capacity = 10; //restore default capacity
-    else capacity = size * 2;
-
-    Data* newElements = new Data[capacity]();
-    for (ulong i = 0; i < size; i++)
+    if (size > 0) 
     {
-        newElements[i] = std::move(oldElements[(head + i) % oldCapacity]);
+        ulong oldCapacity = capacity;
+        capacity = size * 2;
+        
+        Vector<Data> newVector(capacity);
+        for (ulong i = 0; i < size; i++) {newVector[i] = std::move(vector[(head + i) % oldCapacity]);}
+        vector = std::move(newVector);
+        head = 0;
     }
-    delete[] elements;
-    elements = newElements;
-    head = 0;
+    else
+    {
+        capacity = 10;
+        vector.Resize(capacity);
+        head = 0;
+    }
 }
+
 
 template <typename Data>
-void SetVec<Data>::InsertLeftShift(const ulong left) noexcept 
+void SetVec<Data>::InsertLeftShift(const ulong pos) noexcept
 {
-    head = (head + capacity - 1) % capacity; // no risk of underflow
-    for (ulong i = 0; i < left; ++i) 
-    {
-        elements[(head + i) % capacity] = std::move(elements[(head + i + 1) % capacity]);
-    }
+    head = (head + capacity - 1) % capacity;
+    for (ulong i = 0; i < pos; i++) {vector[(head + i) % capacity] = std::move(vector[(head + i + 1) % capacity]);}
 }
-
 template <typename Data>
-void SetVec<Data>::InsertRightShift(const ulong right) noexcept 
+void SetVec<Data>::InsertRightShift(const ulong pos) noexcept
 {
-    for (ulong i = size; i > right; --i)
-    {
-        elements[(head + i) % capacity] = std::move(elements[(head + i - 1) % capacity]);
-    }
+    for (ulong i = size; i > pos; i--) {vector[(head + i) % capacity] = std::move(vector[(head + i - 1) % capacity]);}
 }
-
-template<typename Data>
+template <typename Data>
 void SetVec<Data>::RemoveLeftShift(const ulong pos) noexcept
 {
-    for (ulong i = pos; i > 0; i--) 
-    {
-        elements[(head + i) % capacity] = std::move(elements[(head + i - 1) % capacity]);
-    }
+    for (ulong i = pos; i > 0; i--) {vector[(head + i) % capacity] = std::move(vector[(head + i - 1) % capacity]);}
     head = (head + 1) % capacity;
 }
-
-template<typename Data>
+template <typename Data>
 void SetVec<Data>::RemoveRightShift(const ulong pos) noexcept
 {
-    for (ulong i = pos; i + 1 < size; ++i)
-    {
-        elements[(head + i) % capacity] = std::move(elements[(head + i + 1) % capacity]);
-    }
+    for (ulong i = pos; i + 1 < size; i++) {vector[(head + i) % capacity] = std::move(vector[(head + i + 1) % capacity]);}
 }
+
 /* ************************************************************************** */
 
 }

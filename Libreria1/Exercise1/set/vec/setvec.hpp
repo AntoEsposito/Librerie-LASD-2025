@@ -1,4 +1,3 @@
-
 #ifndef SETVEC_HPP
 #define SETVEC_HPP
 
@@ -25,12 +24,9 @@ private:
 protected:
 
   using Container::size;
-
-  ulong capacity = 10; // start capacity
+  Vector<Data> vector;
   ulong head = 0;
-  Data *elements = new Data[10]();
-
-  // ...
+  ulong capacity = 0; // size of the vector
 
 public:
 
@@ -54,7 +50,7 @@ public:
   /* ************************************************************************ */
 
   // Destructor
-  ~SetVec() {delete[] elements;}
+  ~SetVec() = default;
 
   /* ************************************************************************ */
 
@@ -120,24 +116,18 @@ public:
 
   virtual void Resize(const ulong) override;
 
-
-
 protected:
 
-  // Auxiliary functions, if necessary!
-
+  // Auxiliary functions
   virtual ulong BinarySearch(const Data &) const noexcept;
-
-  virtual void Expand();
-  virtual void Reduce();
-
+  virtual void Expand(); // Doubles the vector size
+  virtual void Reduce(); // Reduces vector size when needed
+  
+  // Circular vector operations
   virtual void InsertLeftShift(const ulong) noexcept;
   virtual void InsertRightShift(const ulong) noexcept;
-
   virtual void RemoveLeftShift(const ulong) noexcept;
   virtual void RemoveRightShift(const ulong) noexcept;
-
-
 };
 
 /* ************************************************************************** */
