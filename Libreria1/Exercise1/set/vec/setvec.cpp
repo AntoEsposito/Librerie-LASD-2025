@@ -370,7 +370,7 @@ void SetVec<Data>::Expand()
     Data *newElements = new Data[capacity]();
     for (ulong i = 0; i < size; i++)
     {
-        newElements[i] = oldElements[(head + i) % oldCapacity];
+        newElements[i] = std::move(oldElements[(head + i) % oldCapacity]);
     }
     delete[] elements;
     elements = newElements;
@@ -383,13 +383,13 @@ void SetVec<Data>::Reduce()
     ulong oldCapacity = capacity;
     Data* oldElements = elements;
 
-    if (size == 0) capacity = 10;
+    if (size == 0) capacity = 10; //restore default capacity
     else capacity = size * 2;
 
     Data* newElements = new Data[capacity]();
     for (ulong i = 0; i < size; i++)
     {
-        newElements[i] = oldElements[(head + i) % oldCapacity];
+        newElements[i] = std::move(oldElements[(head + i) % oldCapacity]);
     }
     delete[] elements;
     elements = newElements;
