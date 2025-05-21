@@ -152,9 +152,12 @@ List<Data> & List<Data>::operator=(const List<Data> &newList)
 template <typename Data>
 List<Data> & List<Data>::operator=(List<Data> &&newList) noexcept
 {
-    std::swap(head, newList.head);
-    std::swap(tail, newList.tail);
-    std::swap(size, newList.size);
+    if (this != &newList)
+    {
+        std::swap(head, newList.head);
+        std::swap(tail, newList.tail);
+        std::swap(size, newList.size);
+    }
     return *this;
 }
 

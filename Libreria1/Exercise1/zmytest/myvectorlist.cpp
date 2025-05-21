@@ -593,7 +593,7 @@ void testVectorListInt(uint & testnum, uint & testerr) {
 
 void testVectorListDouble(uint & testnum, uint & testerr) {
   uint loctestnum = 0, loctesterr = 0;
-  cout << endl << "Begin of BIG Vector/List<double> Test:" << endl;
+  cout << endl << "Begin of my Vector/List<double> Test:" << endl;
   try {
     lasd::SortableVector<double> vec(4);
     SetAt(loctestnum, loctesterr, vec, true, 0, 1.1);

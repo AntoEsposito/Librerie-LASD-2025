@@ -26,7 +26,7 @@ protected:
   using Container::size;
   Vector<Data> vector;
   ulong head = 0;
-  ulong capacity = 0; // size of the vector
+  ulong capacity = 0; // size of the vector, not necessary but useful for the implementation, no need to check the size of the vector every time
 
 public:
 

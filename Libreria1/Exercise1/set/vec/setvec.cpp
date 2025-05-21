@@ -6,8 +6,6 @@ namespace lasd {
 template <typename Data>
 SetVec<Data>::SetVec(const TraversableContainer<Data> &traversableC)
 {
-    capacity = 10;
-    vector.Resize(capacity);
     traversableC.Traverse([this] (const Data &data)
     {
         Insert(data);
@@ -17,8 +15,6 @@ SetVec<Data>::SetVec(const TraversableContainer<Data> &traversableC)
 template <typename Data>
 SetVec<Data>::SetVec(MappableContainer<Data> &&mappableC) noexcept
 {
-    capacity = 10;
-    vector.Resize(capacity);
     mappableC.Map([this] (Data &data)
     {
         Insert(std::move(data));
@@ -29,9 +25,11 @@ SetVec<Data>::SetVec(MappableContainer<Data> &&mappableC) noexcept
 // copy & move constructors
 
 template <typename Data>
-SetVec<Data>::SetVec(const SetVec<Data> &newSet): vector(newSet.vector), head(newSet.head), capacity(newSet.capacity)
+SetVec<Data>::SetVec(const SetVec<Data> &newSet): vector(newSet.vector)
 {
     size = newSet.size;
+    head = newSet.head;
+    capacity = newSet.capacity;
 }
 
 template <typename Data>
@@ -323,10 +321,9 @@ template <typename Data>
 void SetVec<Data>::Clear()
 {
     vector.Clear();
-    vector.Resize(10); // Reset to default size
     size = 0;
     head = 0;
-    capacity = 10;
+    capacity = 0;
 }
 
 
@@ -335,11 +332,16 @@ void SetVec<Data>::Clear()
 template <typename Data>
 void SetVec<Data>::Resize(const ulong newSize)
 {
-    if (newSize < size) size = newSize;
-    
+    if (newSize == 0) Clear();
+    else if (newSize < size)
+    {
+        size = newSize;
+        if (size < capacity / 4) Reduce();
+    }
     else if (newSize > size)
     {
         while (capacity < newSize) Expand();
+        size = newSize;
     }
 }
 
@@ -358,7 +360,7 @@ ulong SetVec<Data>::BinarySearch(const Data &data) const noexcept
         if (operator[](mid) < data) left = mid + 1;
         else right = mid;
     }
-    return left; // either the position of the data or the position where it should be
+    return left; // either the position of the data or, if not found, the position of the predecessor
 }
 
 // Expand the vector by doubling its size
@@ -367,7 +369,7 @@ template <typename Data>
 void SetVec<Data>::Expand()
 {
     ulong oldCapacity = capacity;
-    if (capacity == 0) capacity = 10;
+    if (capacity == 0) capacity = 1;
     else capacity *= 2;
     
     Vector<Data> newVector(capacity);
@@ -388,12 +390,6 @@ void SetVec<Data>::Reduce()
         Vector<Data> newVector(capacity);
         for (ulong i = 0; i < size; i++) {newVector[i] = std::move(vector[(head + i) % oldCapacity]);}
         vector = std::move(newVector);
-        head = 0;
-    }
-    else
-    {
-        capacity = 10;
-        vector.Resize(capacity);
         head = 0;
     }
 }
