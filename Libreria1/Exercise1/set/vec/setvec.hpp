@@ -114,12 +114,14 @@ public:
 
   // Specific member function (inherited from ResizableContainer)
 
-  virtual void Resize(const ulong) override;
+  virtual void Resize(ulong) override;
 
 protected:
 
   // Auxiliary functions
+  
   virtual ulong BinarySearch(const Data &) const noexcept;
+
   virtual void Expand(); // Doubles the vector size
   virtual void Reduce(); // Reduces vector size when needed
   

@@ -330,7 +330,7 @@ void SetVec<Data>::Clear()
 // from ResizableContainer
 
 template <typename Data>
-void SetVec<Data>::Resize(const ulong newSize)
+void SetVec<Data>::Resize(ulong newSize)
 {
     if (newSize == 0) Clear();
     else if (newSize < size)

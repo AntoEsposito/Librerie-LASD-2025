@@ -31,48 +31,82 @@ void testSetInt(lasd::Set<int> & set, uint & testnum, uint & testerr) {
     try {
         Empty(loctestnum, loctesterr, set, false);
         Size(loctestnum, loctesterr, set, true, 10);
-
+        
+        Exists(loctestnum, loctesterr, set, true, -10);
+        Exists(loctestnum, loctesterr, set, true, 5);
+        Exists(loctestnum, loctesterr, set, true, 15);
+        Exists(loctestnum, loctesterr, set, false, 100);
+        Exists(loctestnum, loctesterr, set, false, -100);
+        Exists(loctestnum, loctesterr, set, false, 6);
+        
         Min(loctestnum, loctesterr, set, true, -10);
         Max(loctestnum, loctesterr, set, true, 15);
-
+        
         Remove(loctestnum, loctesterr, set, true, 0);
+        Size(loctestnum, loctesterr, set, true, 9);
+        Exists(loctestnum, loctesterr, set, false, 0);
+        
         InsertC(loctestnum, loctesterr, set, true, 0);
-
-        Exists(loctestnum, loctesterr, set, true, -10);
-        Exists(loctestnum, loctesterr, set, false, 100);
-
-        RemoveMin(loctestnum, loctesterr, set, true);
-        RemoveMax(loctestnum, loctesterr, set, true);
-
+        Size(loctestnum, loctesterr, set, true, 10);
+        Exists(loctestnum, loctesterr, set, true, 0);
+        
         InsertC(loctestnum, loctesterr, set, false, 5);
         InsertC(loctestnum, loctesterr, set, false, -5);
-
-        FoldPreOrder(loctestnum, loctesterr, set, true, &FoldAdd<int>, 0, 15);
-        TraversePreOrder(loctestnum, loctesterr, set, true, &TraversePrint<int>);
-
+        Size(loctestnum, loctesterr, set, true, 10);
+        
+        RemoveMin(loctestnum, loctesterr, set, true);
+        Min(loctestnum, loctesterr, set, true, -7);
+        
+        RemoveMax(loctestnum, loctesterr, set, true);
+        Max(loctestnum, loctesterr, set, true, 10);
+        
+        Size(loctestnum, loctesterr, set, true, 8);
+        
+        Predecessor(loctestnum, loctesterr, set, true, 0, -5);
+        Successor(loctestnum, loctesterr, set, true, 0, 2);
+        Predecessor(loctestnum, loctesterr, set, true, 10, 7);
+        Successor(loctestnum, loctesterr, set, false, 10, 0);
+        Predecessor(loctestnum, loctesterr, set, false, -7, 0);
+        
         Predecessor(loctestnum, loctesterr, set, false, -100, 0);
         Successor(loctestnum, loctesterr, set, false, 100, 0);
-
-        PredecessorNRemove(loctestnum, loctesterr, set, false, 0, -1);
+        
+        PredecessorNRemove(loctestnum, loctesterr, set, true, 3, 2);
         Size(loctestnum, loctesterr, set, true, 7);
-
+        SuccessorNRemove(loctestnum, loctesterr, set, true, 3, 5);
+        Size(loctestnum, loctesterr, set, true, 6);
+        
+        TraversePreOrder(loctestnum, loctesterr, set, true, &TraversePrint<int>);
+        TraversePostOrder(loctestnum, loctesterr, set, true, &TraversePrint<int>);
+        
+        FoldPreOrder(loctestnum, loctesterr, set, true, &FoldAdd<int>, 0, 8);
+        FoldPostOrder(loctestnum, loctesterr, set, true, &FoldMultiply<int>, 1, 0);
+        
         set.Clear();
         Empty(loctestnum, loctesterr, set, true);
         Size(loctestnum, loctesterr, set, true, 0);
-        }
-        catch (...) {
+        
+        InsertC(loctestnum, loctesterr, set, true, 42);
+        Size(loctestnum, loctesterr, set, true, 1);
+        Min(loctestnum, loctesterr, set, true, 42);
+        Max(loctestnum, loctesterr, set, true, 42);
+        
+        RemoveMin(loctestnum, loctesterr, set, true);
+        Empty(loctestnum, loctesterr, set, true);
+    }
+    catch (...) {
         loctestnum++; loctesterr++;
         cout << endl << "Unmanaged error! " << endl;
-        }
-        cout << "End of my Set<int> Test! (Errors/Tests: " << loctesterr << "/" << loctestnum << ")" << endl;
-        testnum += loctestnum;
-        testerr += loctesterr;
-        }
+    }
+    cout << "End of my Set<int> Test! (Errors/Tests: " << loctesterr << "/" << loctestnum << ")" << endl;
+    testnum += loctestnum;
+    testerr += loctesterr;
+}
 
-        void testSetInt(uint & testnum, uint & testerr) {
-        uint loctestnum = 0, loctesterr = 0;
-        cout << endl << "Begin of my Set<int> Test" << endl;
-        try {
+void testSetInt(uint & testnum, uint & testerr) {
+    uint loctestnum = 0, loctesterr = 0;
+    cout << endl << "Begin of my Set<int> Test" << endl;
+    try {
         lasd::Vector<int> vec(10);
         SetAt(loctestnum, loctesterr, vec, true, 0, -10);
         SetAt(loctestnum, loctesterr, vec, true, 1, -5);
@@ -88,26 +122,65 @@ void testSetInt(lasd::Set<int> & set, uint & testnum, uint & testerr) {
         cout << endl << "Begin of SetVec<int> Test:" << endl;
         lasd::SetVec<int> setvec(vec);
         testSetInt(setvec, loctestnum, loctesterr);
+        
+        lasd::SetVec<int> setvecCopy(setvec);
+        EqualSetVec(loctestnum, loctesterr, setvec, setvecCopy, true);
+        setvecCopy.Insert(99);
+        NonEqualSetVec(loctestnum, loctesterr, setvec, setvecCopy, true);
+        
+        lasd::SetVec<int> setvecAssign;
+        setvecAssign = setvecCopy;
+        EqualSetVec(loctestnum, loctesterr, setvecCopy, setvecAssign, true);
+        
+        lasd::SetVec<int> setvecMove(std::move(setvecAssign));
+        Empty(loctestnum, loctesterr, setvecAssign, true);
+        Exists(loctestnum, loctesterr, setvecMove, true, 99);
 
         cout << endl << "Begin of SetLst<int> Test:" << endl;
         lasd::SetLst<int> setlst(vec);
         testSetInt(setlst, loctestnum, loctesterr);
+        
+        lasd::SetLst<int> setlstCopy(setlst);
+        EqualSetLst(loctestnum, loctesterr, setlst, setlstCopy, true);
+        setlstCopy.Insert(-99);
+        NonEqualSetLst(loctestnum, loctesterr, setlst, setlstCopy, true);
+        
+        lasd::SetLst<int> setlstAssign;
+        setlstAssign = setlstCopy;
+        EqualSetLst(loctestnum, loctesterr, setlstCopy, setlstAssign, true);
+        
+        lasd::SetLst<int> setlstMove(std::move(setlstAssign));
+        Empty(loctestnum, loctesterr, setlstAssign, true);
+        Exists(loctestnum, loctesterr, setlstMove, true, -99);
 
+        setvec.Clear();
+        setlst.Clear();
+        
         setvec.InsertAll(vec);
         setlst.InsertAll(vec);
-
-        for (int i = 0; i < 10; ++i)
+        Size(loctestnum, loctesterr, setvec, true, 10);
+        Size(loctestnum, loctesterr, setlst, true, 10);
+        
+        for (int i = 0; i < 10; ++i) 
         {
-        Remove(loctestnum, loctesterr, setvec, true, vec[i]);
-        Remove(loctestnum, loctesterr, setlst, true, vec[i]);
+            Remove(loctestnum, loctesterr, setvec, true, vec[i]);
+            Remove(loctestnum, loctesterr, setlst, true, vec[i]);
         }
         Empty(loctestnum, loctesterr, setvec, true);
         Empty(loctestnum, loctesterr, setlst, true);
-
+        
         setvec.InsertAll(vec);
         setlst.InsertAll(vec);
         EqualLinear(loctestnum, loctesterr, setvec, setlst, true);
-
+        
+        setvec.Clear();
+        setlst.Clear();
+        EqualLinear(loctestnum, loctesterr, setvec, setlst, true);
+        
+        setvec.Insert(42);
+        NonEqualLinear(loctestnum, loctesterr, setvec, setlst, true);
+        setlst.Insert(42);
+        EqualLinear(loctestnum, loctesterr, setvec, setlst, true);
     }
     catch (...) {
         loctestnum++; loctesterr++;

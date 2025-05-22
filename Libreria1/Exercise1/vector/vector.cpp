@@ -152,7 +152,7 @@ Data & Vector<Data>::Back()
 // Vector inherited methods (from ClearableContainer)
 
 template <typename Data>
-void Vector<Data>::Resize(const ulong newSize)
+void Vector<Data>::Resize(ulong newSize)
 {
     if (newSize == 0) Clear();
     else if (size != newSize)
