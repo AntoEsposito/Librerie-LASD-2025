@@ -112,13 +112,13 @@ public:
 
   // Specific member functions
 
-  virtual void InsertAtFront(const Data &); // Copy of the value
-  virtual void InsertAtFront(Data &&); // Move of the value
-  virtual void RemoveFromFront(); // (must throw std::length_error when empty)
-  virtual Data FrontNRemove(); // (must throw std::length_error when empty)
+  virtual inline void InsertAtFront(const Data &); // Copy of the value
+  virtual inline void InsertAtFront(Data &&); // Move of the value
+  virtual inline void RemoveFromFront(); // (must throw std::length_error when empty)
+  virtual inline Data FrontNRemove(); // (must throw std::length_error when empty)
 
-  virtual void InsertAtBack(const Data &); // Copy of the value
-  virtual void InsertAtBack(Data &&); // Move of the value
+  virtual inline void InsertAtBack(const Data &); // Copy of the value
+  virtual inline void InsertAtBack(Data &&); // Move of the value
   virtual void RemoveFromBack(); // (must throw std::length_error when empty)
   virtual Data BackNRemove(); // (must throw std::length_error when empty)
 

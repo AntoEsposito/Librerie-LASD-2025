@@ -103,7 +103,7 @@ public:
 
   // Specific member function (inherited from MappableContainer)
 
-  virtual void Map(MapFun) override; // Override MappableContainer member
+  virtual inline void Map(MapFun) override; // Override MappableContainer member
 
 };
 
@@ -153,7 +153,7 @@ public:
 
   // Specific member function (inherited from MappableContainer)
 
-  virtual void Map(MapFun) override; // Override MappableContainer member
+  virtual inline void Map(MapFun) override; // Override MappableContainer member
 
 };
 

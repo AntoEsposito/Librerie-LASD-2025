@@ -59,7 +59,7 @@ public:
   using FoldFun = std::function<Accumulator(const Data &, const Accumulator &)>;
 
   template <typename Accumulator>
-  Accumulator Fold(FoldFun<Accumulator>, Accumulator) const;
+  inline Accumulator Fold(FoldFun<Accumulator>, Accumulator) const;
 
   /* ************************************************************************ */
 
@@ -114,7 +114,7 @@ public:
   using FoldFun = typename TraversableContainer<Data>::FoldFun<Accumulator>;
 
   template <typename Accumulator>
-  Accumulator PreOrderFold(FoldFun<Accumulator>, Accumulator) const;
+  inline Accumulator PreOrderFold(FoldFun<Accumulator>, Accumulator) const;
 
   /* ************************************************************************ */
 
@@ -169,7 +169,7 @@ public:
   using FoldFun = typename TraversableContainer<Data>::FoldFun<Accumulator>;
 
   template <typename Accumulator>
-  Accumulator PostOrderFold(FoldFun<Accumulator>, Accumulator) const;
+  inline Accumulator PostOrderFold(FoldFun<Accumulator>, Accumulator) const;
 
   /* ************************************************************************ */
 

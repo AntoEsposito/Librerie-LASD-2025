@@ -46,9 +46,9 @@ public:
 
   // Specific member functions
 
-  inline virtual bool Empty() const noexcept {return (size == 0);} // (concrete function should not throw exceptions)
+  inline bool Empty() const noexcept {return (size == 0);} // (concrete function should not throw exceptions)
 
-  inline virtual ulong Size() const noexcept {return size;} // (concrete function should not throw exceptions)
+  inline ulong Size() const noexcept {return size;} // (concrete function should not throw exceptions)
 
 };
 
@@ -134,7 +134,7 @@ public:
 
   // Specific member function (inherited from ClearableContainer)
 
-  inline void Clear() override {Resize(0);} // Override ClearableContainer member
+  inline virtual void Clear() override {Resize(0);} // Override ClearableContainer member
 
 };
 

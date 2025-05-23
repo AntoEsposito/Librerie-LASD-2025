@@ -72,11 +72,11 @@ public:
 
   // Specific member functions (inherited from OrderedDictionaryContainer)
 
-  virtual const Data & Min() const override; // Override OrderedDictionaryContainer member (concrete function must throw std::length_error when empty)
-  virtual const Data MinNRemove() override; // Override OrderedDictionaryContainer member (concrete function must throw std::length_error when empty)
-  virtual void RemoveMin() override; // Override OrderedDictionaryContainer member (concrete function must throw std::length_error when empty)
+  virtual inline const Data & Min() const override; // Override OrderedDictionaryContainer member (concrete function must throw std::length_error when empty)
+  virtual inline const Data MinNRemove() override; // Override OrderedDictionaryContainer member (concrete function must throw std::length_error when empty)
+  virtual inline void RemoveMin() override; // Override OrderedDictionaryContainer member (concrete function must throw std::length_error when empty)
 
-  virtual const Data & Max() const override; // Override OrderedDictionaryContainer member (concrete function must throw std::length_error when empty)
+  virtual inline const Data & Max() const override; // Override OrderedDictionaryContainer member (concrete function must throw std::length_error when empty)
   virtual const Data MaxNRemove() override; // Override OrderedDictionaryContainer member (concrete function must throw std::length_error when empty)
   virtual void RemoveMax() override; // Override OrderedDictionaryContainer member (concrete function must throw std::length_error when empty)
 

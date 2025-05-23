@@ -101,6 +101,11 @@ void SetLst<Data>::RemoveMax()
     List<Data>::RemoveFromBack();
 }
 
+
+// NOTE: the predecessor functions use the classic linear search algorithm to find the predecessor of the predecessor instead of the binary search algorithm
+// because the binary search function i implemented to find it and the Predecessor functions that should've used it were too complex and must check too many conditions
+// i prederred code simplicity and readability over small performance gain
+// the successor functions are implemented using the binary search algorithm
 template <typename Data>
 const Data & SetLst<Data>::Predecessor(const Data &data) const
 {
