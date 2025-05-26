@@ -26,7 +26,7 @@ using namespace std;
 
 // testSetInt test
 
-void testSetInt(lasd::Set<int> & set, uint & testnum, uint & testerr) {
+void mytestSetInt(lasd::Set<int> & set, uint & testnum, uint & testerr) {
     uint loctestnum = 0, loctesterr = 0;
     try {
         Empty(loctestnum, loctesterr, set, false);
@@ -103,7 +103,7 @@ void testSetInt(lasd::Set<int> & set, uint & testnum, uint & testerr) {
     testerr += loctesterr;
 }
 
-void testSetInt(uint & testnum, uint & testerr) {
+void mytestSetInt(uint & testnum, uint & testerr) {
     uint loctestnum = 0, loctesterr = 0;
     cout << endl << "Begin of my Set<int> Test" << endl;
     try {
@@ -121,7 +121,7 @@ void testSetInt(uint & testnum, uint & testerr) {
 
         cout << endl << "Begin of SetVec<int> Test:" << endl;
         lasd::SetVec<int> setvec(vec);
-        testSetInt(setvec, loctestnum, loctesterr);
+        mytestSetInt(setvec, loctestnum, loctesterr);
         
         lasd::SetVec<int> setvecCopy(setvec);
         EqualSetVec(loctestnum, loctesterr, setvec, setvecCopy, true);
@@ -138,7 +138,7 @@ void testSetInt(uint & testnum, uint & testerr) {
 
         cout << endl << "Begin of SetLst<int> Test:" << endl;
         lasd::SetLst<int> setlst(vec);
-        testSetInt(setlst, loctestnum, loctesterr);
+        mytestSetInt(setlst, loctestnum, loctesterr);
         
         lasd::SetLst<int> setlstCopy(setlst);
         EqualSetLst(loctestnum, loctesterr, setlst, setlstCopy, true);
@@ -194,7 +194,7 @@ void testSetInt(uint & testnum, uint & testerr) {
 
 // testSetFloat test
 
-void testSetFloat(uint & testnum, uint & testerr) {
+void mytestSetFloat(uint & testnum, uint & testerr) {
     uint loctestnum = 0, loctesterr = 0;
     cout << endl << "Begin of my Set<float> Test" << endl;
     try {
@@ -332,10 +332,11 @@ void testSetFloat(uint & testnum, uint & testerr) {
 
 // testSetString test
 
-void testSetString(lasd::Set<string> & set, uint & testnum, uint & testerr) {
+void mytestSetString(lasd::Set<string> & set, uint & testnum, uint & testerr) {
     uint loctestnum = 0, loctesterr = 0;
     try {
-        Empty(loctestnum, loctesterr, set, false);
+        set.Clear();
+        Empty(loctestnum, loctesterr, set, true);
 
         InsertC(loctestnum, loctesterr, set, true, string("A"));
         InsertC(loctestnum, loctesterr, set, true, string("AB"));
@@ -371,14 +372,14 @@ void testSetString(lasd::Set<string> & set, uint & testnum, uint & testerr) {
 
         TraversePreOrder(loctestnum, loctesterr, set, true, &TraversePrint<string>);
         TraversePostOrder(loctestnum, loctesterr, set, true, &TraversePrint<string>);
-        FoldPreOrder(loctestnum, loctesterr, set, true, &FoldStringConcatenate, string("!"), string("!ABCD EFGHIJKLMN"));
-        FoldPostOrder(loctestnum, loctesterr, set, true, &FoldStringConcatenate, string("!"), string("!MNKLIJGH EFCDAB"));
+        FoldPreOrder(loctestnum, loctesterr, set, true, &FoldStringConcatenate, string("!"), string("!ABCDEFGHIJKLMN"));
+        FoldPostOrder(loctestnum, loctesterr, set, true, &FoldStringConcatenate, string("!"), string("!MNKLIJGHEFCDAB"));
 
         InsertC(loctestnum, loctesterr, set, true, string(""));
         InsertC(loctestnum, loctesterr, set, true, string(" "));
         InsertC(loctestnum, loctesterr, set, true, string("123"));
         InsertC(loctestnum, loctesterr, set, true, string("!@#"));
-        InsertC(loctestnum, loctesterr, set, true, string("abc")); // case sensitivity
+        InsertC(loctestnum, loctesterr, set, true, string("abc"));
 
         Exists(loctestnum, loctesterr, set, true, string(""));
         Exists(loctestnum, loctesterr, set, true, string(" "));
@@ -412,7 +413,7 @@ void testSetString(lasd::Set<string> & set, uint & testnum, uint & testerr) {
     testnum += loctestnum;
     testerr += loctesterr;
 }
-void testSetString(uint & testnum, uint & testerr) {
+void mytestSetString(uint & testnum, uint & testerr) {
     uint loctestnum = 0, loctesterr = 0;
     cout << endl << "Begin of my Set<string> Test" << endl;
     try {
@@ -430,6 +431,8 @@ void testSetString(uint & testnum, uint & testerr) {
 
         cout << endl << "Begin of SetVec<string> Test:" << endl;
         lasd::SetVec<string> setvec(vec);
+        lasd::SetVec<string> vectotest(vec);
+        mytestSetString(vectotest, loctestnum, loctesterr);
 
         InsertC(loctestnum, loctesterr, setvec, false, string("AA"));
         InsertC(loctestnum, loctesterr, setvec, true, string(""));
@@ -477,6 +480,8 @@ void testSetString(uint & testnum, uint & testerr) {
 
         cout << endl << "Begin of SetLst<string> Test:" << endl;
         lasd::SetLst<string> setlst(vec);
+        lasd::SetLst<string> lsttotest(vec);
+        mytestSetString(lsttotest, loctestnum, loctesterr);
 
         InsertC(loctestnum, loctesterr, setlst, false, string("AA"));
         InsertC(loctestnum, loctesterr, setlst, true, string(""));
@@ -543,9 +548,9 @@ void testSetString(uint & testnum, uint & testerr) {
 
 /* ************************************************************************** */
 
-void MyFullTestB(uint & testnum, uint & testerr) {
-    testSetInt(testnum, testerr);
-    testSetFloat(testnum, testerr);
-    testSetString(testnum, testerr);
+void MyFullTest1B(uint & testnum, uint & testerr) {
+    mytestSetInt(testnum, testerr);
+    mytestSetFloat(testnum, testerr);
+    mytestSetString(testnum, testerr);
     cout << endl << "My test for Sets (Errors/Tests: " << testerr << "/" << testnum << ")" << endl;
 }

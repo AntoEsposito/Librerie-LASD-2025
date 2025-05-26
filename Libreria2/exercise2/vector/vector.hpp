@@ -65,8 +65,8 @@ public:
   /* ************************************************************************ */
 
   // Comparison operators
-  inline bool operator==(const Vector &) const noexcept;
-  inline bool operator!=(const Vector &) const noexcept;
+  bool operator==(const Vector &) const noexcept;
+  bool operator!=(const Vector &) const noexcept;
 
   /* ************************************************************************ */
 
