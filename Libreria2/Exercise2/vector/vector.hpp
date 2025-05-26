@@ -13,7 +13,7 @@ namespace lasd {
 /* ************************************************************************** */
 
 template <typename Data>
-class Vector {
+class Vector: virtual public MutableLinearContainer<Data>, virtual public ResizableContainer {
   // Must extend MutableLinearContainer<Data>,
   //             ResizableContainer
 
@@ -23,80 +23,82 @@ private:
 
 protected:
 
-  // using Container::???;
+  using Container::size;
+
+  Data * elements = nullptr;
 
   // ...
 
 public:
 
   // Default constructor
-  // Vector() specifiers;
+  Vector() = default;
 
   /* ************************************************************************ */
 
   // Specific constructors
-  // Vector(argument) specifiers; // A vector with a given initial dimension
-  // Vector(argument) specifiers; // A vector obtained from a TraversableContainer
-  // Vector(argument) specifiers; // A vector obtained from a MappableContainer
+  Vector(const ulong); // A vector with a given initial dimension
+  Vector(const TraversableContainer<Data> &) ; // A vector obtained from a TraversableContainer
+  Vector(MappableContainer<Data> &&) noexcept; // A vector obtained from a MappableContainer
 
   /* ************************************************************************ */
 
   // Copy constructor
-  // Vector(argument) specifiers;
+  Vector(const Vector &);
 
   // Move constructor
-  // Vector(argument) specifiers;
+  Vector(Vector &&) noexcept;
 
   /* ************************************************************************ */
 
   // Destructor
-  // ~Vector() specifiers;
+  virtual ~Vector();
 
   /* ************************************************************************ */
 
   // Copy assignment
-  // type operator=(argument) specifiers;
+  Vector & operator=(const Vector &);
 
   // Move assignment
-  // type operator=(argument) specifiers;
+  Vector & operator=(Vector &&) noexcept;
 
   /* ************************************************************************ */
 
   // Comparison operators
-  // type operator==(argument) specifiers;
-  // type operator!=(argument) specifiers;
+  inline bool operator==(const Vector &) const noexcept;
+  inline bool operator!=(const Vector &) const noexcept;
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from MutableLinearContainer)
 
-  // type operator[](argument) specifiers; // Override MutableLinearContainer member (must throw std::out_of_range when out of range)
+  virtual inline Data & operator[](const ulong) override; // Override MutableLinearContainer member (must throw std::out_of_range when out of range)
 
-  // type Front() specifiers; // Override MutableLinearContainer member (must throw std::length_error when empty)
+  virtual inline Data & Front() override; // Override MutableLinearContainer member (must throw std::length_error when empty)
 
-  // type Back() specifiers; // Override MutableLinearContainer member (must throw std::length_error when empty)
+  virtual inline Data & Back() override; // Override MutableLinearContainer member (must throw std::length_error when empty)
 
   /* ************************************************************************ */
 
   // Specific member functions (inherited from LinearContainer)
 
-  // type operator[](argument) specifiers; // Override LinearContainer member (must throw std::out_of_range when out of range)
+  virtual inline const Data & operator[](const ulong) const override; // Override LinearContainer member (must throw std::out_of_range when out of range)
 
-  // type Front() specifiers; // Override LinearContainer member (must throw std::length_error when empty)
+  virtual inline const Data & Front() const override; // Override LinearContainer member (must throw std::length_error when empty)
 
-  // type Back() specifiers; // Override LinearContainer member (must throw std::length_error when empty)
+  virtual inline const Data & Back() const override; // Override LinearContainer member (must throw std::length_error when empty)
 
   /* ************************************************************************ */
 
   // Specific member function (inherited from ResizableContainer)
 
-  // type Resize(argument) specifiers; // Override ResizableContainer member
+  virtual void Resize(ulong) override; // Override ResizableContainer member
 
   /* ************************************************************************ */
 
   // Specific member function (inherited from ClearableContainer)
 
-  // type Clear() specifiers; // Override ClearableContainer member
+  virtual inline void Clear() override; // Override ClearableContainer member
 
 protected:
 
@@ -107,7 +109,7 @@ protected:
 /* ************************************************************************** */
 
 template <typename Data>
-class SortableVector {
+class SortableVector: virtual public Vector<Data>, virtual public SortableLinearContainer<Data> {
   // Must extend Vector<Data>,
   //             SortableLinearContainer<Data>
 
@@ -117,42 +119,42 @@ private:
 
 protected:
 
-  // using Container::???;
+  using Container::size;
 
   // ...
 
 public:
 
   // Default constructor
-  // SortableVector() specifiers;
+  SortableVector() = default;
 
   /* ************************************************************************ */
 
   // Specific constructors
-  // SortableVector(argument) specifiers; // A vector with a given initial dimension
-  // SortableVector(argument) specifiers; // A vector obtained from a TraversableContainer
-  // SortableVector(argument) specifiers; // A vector obtained from a MappableContainer
+  SortableVector(const ulong); // A vector with a given initial dimension
+  SortableVector(const TraversableContainer<Data> &); // A vector obtained from a TraversableContainer
+  SortableVector(MappableContainer<Data> &&) noexcept; // A vector obtained from a MappableContainer
 
   /* ************************************************************************ */
 
   // Copy constructor
-  // SortableVector(argument) specifiers;
+  SortableVector(const SortableVector &);
 
   // Move constructor
-  // SortableVector(argument) specifiers;
+  SortableVector(SortableVector &&) noexcept;
 
   /* ************************************************************************ */
 
   // Destructor
-  // ~SortableVector() specifiers;
+  virtual ~SortableVector() = default; // uses the Vector<Data> destructor
 
   /* ************************************************************************ */
 
   // Copy assignment
-  // type operator=(argument) specifiers;
+  SortableVector & operator=(const SortableVector &);
 
   // Move assignment
-  // type operator=(argument) specifiers;
+  SortableVector & operator=(SortableVector &&) noexcept;
 
 protected:
 
