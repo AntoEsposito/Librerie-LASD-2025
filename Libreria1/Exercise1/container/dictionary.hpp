@@ -36,7 +36,7 @@ public:
   DictionaryContainer & operator=(const DictionaryContainer &) = delete; // Copy assignment of abstract types is not possible.
 
   // Move assignment
-  DictionaryContainer & operator=(DictionaryContainer &&) = delete; // Move assignment of abstract types is not possible.
+  DictionaryContainer & operator=(DictionaryContainer &&) noexcept = delete; // Move assignment of abstract types is not possible.
 
   /* ************************************************************************ */
 
@@ -83,7 +83,7 @@ public:
   OrderedDictionaryContainer & operator=(const OrderedDictionaryContainer &) = delete; // Copy assignment of abstract types is not possible.
 
   // Move assignment
-  OrderedDictionaryContainer & operator=(OrderedDictionaryContainer &&) = delete; // Move assignment of abstract types is not possible.
+  OrderedDictionaryContainer & operator=(OrderedDictionaryContainer &&) noexcept = delete; // Move assignment of abstract types is not possible.
 
   /* ************************************************************************ */
 
@@ -96,19 +96,19 @@ public:
   // Specific member functions
 
   virtual const Data & Min() const = 0; // (concrete function must throw std::length_error when empty)
-  virtual const Data MinNRemove() = 0; // (concrete function must throw std::length_error when empty)
+  virtual Data MinNRemove() = 0; // (concrete function must throw std::length_error when empty)
   virtual void RemoveMin() = 0; // (concrete function must throw std::length_error when empty)
 
   virtual const Data & Max() const = 0; // (concrete function must throw std::length_error when empty)
-  virtual const Data MaxNRemove() = 0; // (concrete function must throw std::length_error when empty)
+  virtual Data MaxNRemove() = 0; // (concrete function must throw std::length_error when empty)
   virtual void RemoveMax() = 0; // (concrete function must throw std::length_error when empty)
 
   virtual const Data & Predecessor(const Data &) const = 0; // (concrete function must throw std::length_error when not found)
-  virtual const Data PredecessorNRemove(const Data &) = 0; // (concrete function must throw std::length_error when not found)
+  virtual Data PredecessorNRemove(const Data &) = 0; // (concrete function must throw std::length_error when not found)
   virtual void RemovePredecessor(const Data &) = 0; // (concrete function must throw std::length_error when not found)
 
   virtual const Data & Successor(const Data &) const = 0; // (concrete function must throw std::length_error when not found)
-  virtual const Data SuccessorNRemove(const Data &) = 0; // (concrete function must throw std::length_error when not found)
+  virtual Data SuccessorNRemove(const Data &) = 0; // (concrete function must throw std::length_error when not found)
   virtual void RemoveSuccessor(const Data &) = 0; // (concrete function must throw std::length_error when not found)
 
 };

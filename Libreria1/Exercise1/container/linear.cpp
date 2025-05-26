@@ -125,7 +125,7 @@ void SortableLinearContainer<Data>::Sort() //InsertionSort
         ulong j = i;
         while (j > 0 && (*this)[j-1] > x) // no risk of j becoming < 0
         {
-            (*this)[j] = (*this)[j-1];
+            (*this)[j] = std::move((*this)[j-1]);
             j--;
         }
         (*this)[j] = x;

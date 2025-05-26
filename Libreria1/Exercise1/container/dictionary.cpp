@@ -12,7 +12,7 @@ bool DictionaryContainer<Data>::InsertAll(const TraversableContainer<Data> &trav
     bool allInserted = true;
     traversableC.Traverse([this, &allInserted] (const Data &data)
     {
-        allInserted = Insert(data);
+        allInserted &= Insert(data);
     });
     return allInserted;
 }
@@ -23,7 +23,7 @@ bool DictionaryContainer<Data>::InsertAll(MappableContainer<Data> &&mappableC)
     bool allInserted = true;
     mappableC.Map([this, &allInserted] (Data &data)
     {
-        allInserted = Insert(std::move(data));
+        allInserted &= Insert(std::move(data));
     });
     return allInserted;
 }
@@ -34,7 +34,7 @@ bool DictionaryContainer<Data>::RemoveAll(const TraversableContainer<Data> &trav
     bool allRemoved = true;
     traversableC.Traverse([this, &allRemoved] (const Data &data)
     {
-        allRemoved = Insert(data);
+        allRemoved &= Remove(data);
     });
     return allRemoved;
 }
@@ -45,7 +45,7 @@ bool DictionaryContainer<Data>::InsertSome(const TraversableContainer<Data> &tra
     bool someInserted = false;
     traversableC.Traverse([this, &someInserted] (const Data &data)
     {
-        someInserted = Insert(data);
+        someInserted |= Insert(data);
     });
     return someInserted;
 }
@@ -56,7 +56,7 @@ bool DictionaryContainer<Data>::InsertSome(MappableContainer<Data> &&mappableC)
     bool someInserted = false;
     mappableC.Map([this, &someInserted] (Data &data)
     {
-        someInserted = Remove(std::move(data));
+        someInserted |= Remove(std::move(data));
     });
     return someInserted;
 }
@@ -67,7 +67,7 @@ bool DictionaryContainer<Data>::RemoveSome(const TraversableContainer<Data> &tra
     bool someRemoved = false;
     traversableC.Traverse([this, &someRemoved] (const Data &data)
     {
-        someRemoved = Remove(data);
+        someRemoved |= Remove(data);
     });
     return someRemoved;
 }

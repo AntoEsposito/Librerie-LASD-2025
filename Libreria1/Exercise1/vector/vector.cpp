@@ -40,10 +40,13 @@ template <typename Data>
 Vector<Data>::Vector(const Vector<Data> &vectorToCopy)
 {
     size = vectorToCopy.size;
-    elements = new Data[size];
-    for (ulong i = 0; i < size; i++)
+    if (size > 0)
     {
-        elements[i] = vectorToCopy.elements[i];
+        elements = new Data[size];
+        for (ulong i = 0; i < size; i++)
+        {
+            elements[i] = vectorToCopy.elements[i];
+        }
     }
 }
 
@@ -71,14 +74,17 @@ Vector<Data> & Vector<Data>::operator=(const Vector<Data> &vectorToAssign)
 {
     if (this != &vectorToAssign)
     {
+        delete[] elements;
         size = vectorToAssign.size;
-        Data *newElements = new Data[size];
-        for (ulong i = 0; i < size; i++)
+        if (size > 0)
         {
-            newElements[i] = vectorToAssign.elements[i];
+            elements = new Data[size];
+            for (ulong i = 0; i < size; i++)
+            {
+                elements[i] = vectorToAssign.elements[i];
+            }
         }
-        delete [] elements;
-        elements = newElements;
+        else elements = nullptr;
     }
     return *this;
 }
@@ -163,8 +169,8 @@ void Vector<Data>::Resize(ulong newSize)
         {
             tmpElements[i] = std::move(elements[i]);
         }
-        std::swap(elements, tmpElements);
-        delete[] tmpElements;
+        delete[] elements;
+        elements = tmpElements;
         size = newSize;
     }
 }

@@ -99,7 +99,7 @@ const Data & SetVec<Data>::Min() const
 }
 
 template<typename Data>
-const Data SetVec<Data>::MinNRemove()
+Data SetVec<Data>::MinNRemove()
 {
     Data min = Min();
     head = (head + 1) % capacity;
@@ -129,7 +129,7 @@ const Data & SetVec<Data>::Max() const
 }
 
 template<typename Data>
-const Data SetVec<Data>::MaxNRemove()
+Data SetVec<Data>::MaxNRemove()
 {
     Data max = Max();
     size--;
@@ -156,7 +156,7 @@ const Data & SetVec<Data>::Predecessor(const Data &data) const
 }
 
 template<typename Data>
-const Data SetVec<Data>::PredecessorNRemove(const Data &data) 
+Data SetVec<Data>::PredecessorNRemove(const Data &data) 
 {
     ulong position = BinarySearch(data);
     if (position == 0 || size == 0) throw std::length_error("Predecessor does not exist");
@@ -189,16 +189,21 @@ template<typename Data>
 const Data & SetVec<Data>::Successor(const Data &data) const
 {
     ulong position = BinarySearch(data);
-    if (position > size-1 || size == 0) throw std::length_error("Successor does not exist");
-    else
+    if (position >= size || size == 0) throw std::length_error("Successor does not exist");
+    
+    if (operator[](position) == data) 
     {
-        if (operator[](position) == data && position < size - 1) return operator[](position + 1);
-        else return operator[](position);
-    } 
+        if (position == size - 1) throw std::length_error("Successor does not exist");
+        return operator[](position + 1);
+    }
+    else 
+    {
+        return operator[](position);
+    }
 }
 
 template<typename Data>
-const Data SetVec<Data>::SuccessorNRemove(const Data &data) 
+Data SetVec<Data>::SuccessorNRemove(const Data &data) 
 {
     ulong position = BinarySearch(data);
     if (position > size - 1 || size == 0) throw std::length_error("Successor does not exist");
@@ -244,17 +249,15 @@ bool SetVec<Data>::Insert(const Data &data)
 {
     ulong position = BinarySearch(data);
     if (position < size && operator[](position) == data) return false;
-    else
-    {
-        if (size == capacity) Expand();
-        
-        if (position > size - position) InsertRightShift(position);
-        else InsertLeftShift(position);
-        
-        vector[(head + position) % capacity] = data;
-        size++;
-        return true;
-    }
+
+    if (size == capacity) Expand();
+    
+    if (position > size - position) InsertRightShift(position);
+    else InsertLeftShift(position);
+    
+    vector[(head + position) % capacity] = data;
+    size++;
+    return true;
 }
 
 template <typename Data>

@@ -18,7 +18,7 @@ template <typename Data>
 List<Data>::Node::Node(const Node &nodeToCopy): element(nodeToCopy.element) {}
 
 template <typename Data>
-List<Data>::Node::Node(Node &&nodeToMove): element(std::move(nodeToMove.element)) {}
+List<Data>::Node::Node(Node &&nodeToMove) noexcept: element(std::move(nodeToMove.element)) {}
 
 
 // Node comparison operators
@@ -105,8 +105,10 @@ List<Data>::~List()
 template <typename Data>
 List<Data> & List<Data>::operator=(const List<Data> &newList)
 {
-    if (newList.Empty() && this != &newList) Clear();
-    else if (this != &newList)
+    if (this == &newList) return *this;
+
+    if (newList.Empty()) Clear();
+    else
     {
         Node *tmp = head;
         Node *newTmp = newList.head;
@@ -128,7 +130,7 @@ List<Data> & List<Data>::operator=(const List<Data> &newList)
         else
         {
             // copy of the nodes of the newlist
-            Node *previousNode = tmp;
+            Node *previousNode = nullptr;
             for (ulong i = 0;  i < newList.size; i++)
             {
                 tmp -> element = newTmp -> element;

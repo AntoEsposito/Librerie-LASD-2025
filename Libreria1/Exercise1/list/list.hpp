@@ -46,7 +46,7 @@ protected:
     Node(const Node &);
 
     // Move constructor
-    Node(Node &&);
+    Node(Node &&) noexcept;
 
     /* ********************************************************************** */
 
@@ -138,9 +138,9 @@ public:
 
   virtual const Data & operator[](const ulong) const override; // Override LinearContainer member (must throw std::out_of_range when out of range)
 
-  virtual const inline Data & Front() const override; // Override LinearContainer member (must throw std::length_error when empty)
+  virtual inline const Data & Front() const override; // Override LinearContainer member (must throw std::length_error when empty)
 
-  virtual const inline Data & Back() const override; // Override LinearContainer member (must throw std::length_error when empty)
+  virtual inline const Data & Back() const override; // Override LinearContainer member (must throw std::length_error when empty)
 
   /* ************************************************************************ */
 

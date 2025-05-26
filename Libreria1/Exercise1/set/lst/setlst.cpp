@@ -72,7 +72,7 @@ const Data & SetLst<Data>::Min() const
 }
 
 template <typename Data>
-const Data SetLst<Data>::MinNRemove()
+Data SetLst<Data>::MinNRemove()
 {
     return List<Data>::FrontNRemove();
 }
@@ -90,7 +90,7 @@ const Data & SetLst<Data>::Max() const
 }
 
 template <typename Data>
-const Data SetLst<Data>::MaxNRemove()
+Data SetLst<Data>::MaxNRemove()
 {
     return List<Data>::BackNRemove();
 }
@@ -102,10 +102,13 @@ void SetLst<Data>::RemoveMax()
 }
 
 
-// NOTE: the predecessor functions use the classic linear search algorithm to find the predecessor of the predecessor instead of the binary search algorithm
-// because the binary search function i implemented to find it and the Predecessor functions that should've used it were too complex and must check too many conditions
-// i prederred code simplicity and readability over small performance gain
-// the successor functions are implemented using the binary search algorithm
+/* 
+ * NOTE: The predecessor functions use linear search instead of binary search
+ * for finding the predecessor of the predecessor. This design choice prioritizes
+ * code simplicity and readability over marginal performance gains, as the
+ * binary search implementation would require complex condition checking.
+ * The successor functions do use the binary search algorithm via Find().
+ */
 template <typename Data>
 const Data & SetLst<Data>::Predecessor(const Data &data) const
 {
@@ -121,7 +124,7 @@ const Data & SetLst<Data>::Predecessor(const Data &data) const
 }
 
 template <typename Data>
-const Data SetLst<Data>::PredecessorNRemove(const Data &data)
+Data SetLst<Data>::PredecessorNRemove(const Data &data)
 {
     if (size == 0 || head -> element >= data) throw std::length_error("Predecessor does not exist");
 
@@ -180,7 +183,7 @@ const Data & SetLst<Data>::Successor(const Data &data) const
 }
 
 template <typename Data>
-const Data SetLst<Data>::SuccessorNRemove(const Data &data)
+Data SetLst<Data>::SuccessorNRemove(const Data &data)
 {
     Node *node = Find(data);
     if (node == nullptr || node == tail) throw std::length_error("Successor does not exist");
@@ -264,7 +267,7 @@ bool SetLst<Data>::Remove(const Data &data)
             if (current -> nextNode -> element >= data) break;
             current = current -> nextNode;
         }
-        if (current -> nextNode -> element == data)
+        if (current -> nextNode != nullptr && current -> nextNode -> element == data)
         {
             Node *toDelete = current -> nextNode;
             current -> nextNode = toDelete -> nextNode;
@@ -309,6 +312,8 @@ void SetLst<Data>::Clear()
 template <typename Data>
 SetLst<Data>::Node * SetLst<Data>::Find(const Data &data) const
 {
+    if (size == 0) return nullptr;
+
     Node *result = nullptr;
     Node *start = head;
     ulong remaining = size;
