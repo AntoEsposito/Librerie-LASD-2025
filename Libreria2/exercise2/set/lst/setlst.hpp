@@ -14,7 +14,7 @@ namespace lasd {
 /* ************************************************************************** */
 
 template <typename Data>
-class SetLst: virtual public Set<Data>, virtual protected List<Data> {
+class SetLst: virtual public Set<Data>, protected List<Data> {
   // Must extend Set<Data>,
   //             List<Data>
 

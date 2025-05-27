@@ -25,7 +25,7 @@ protected:
 
   using Container::size;
 
-  HeapVec<Data> heap;
+  HeapVec<Data> heap{10};
   ulong capacity = 10; // Size of the heap
 
 
@@ -34,7 +34,7 @@ protected:
 public:
 
   // Default constructor
-  PQHeap(): heap(10) {};
+  PQHeap() = default;
 
   /* ************************************************************************ */
 
@@ -75,6 +75,10 @@ public:
 
   virtual void Change(const ulong, const Data &) override; // Override PQ member (Copy of the value) 
   virtual void Change(const ulong, Data &&) override; // Override PQ member (Move of the value)
+
+  // Inherityed member functions (inherited from LinearContainer)
+  virtual void Clear() override;
+  virtual inline const Data & operator[](const ulong) const override;
 
 protected:
 

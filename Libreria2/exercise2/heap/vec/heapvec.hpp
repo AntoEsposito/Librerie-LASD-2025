@@ -1,4 +1,3 @@
-
 #ifndef HEAPVEC_HPP
 #define HEAPVEC_HPP
 
@@ -14,7 +13,7 @@ namespace lasd {
 /* ************************************************************************** */
 
 template <typename Data>
-class HeapVec: virtual public Heap<Data>, virtual protected SortableVector<Data> {
+class HeapVec: virtual public Heap<Data>, public SortableVector<Data> {
   // Must extend Heap<Data>,
   // Must extend SortableVector<Data>
 
@@ -81,9 +80,12 @@ public:
 
   virtual void Sort() override; // Override SortableLinearContainer member
 
+  void HeapifyAt(ulong , ulong); // for pqheap
+  void HeapifyFromSize(ulong); // for pqheap
+
 protected:
 
-  virtual void Heapify(ulong, ulong);
+  virtual void Heapify(ulong, ulong); // index, heapsize
 
 };
 
