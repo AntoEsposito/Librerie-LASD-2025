@@ -67,8 +67,7 @@ PQHeap<Data> & PQHeap<Data>::operator=(PQHeap<Data> &&toAssign) noexcept
 template <typename Data>
 const Data & PQHeap<Data>::Tip() const
 {
-    if (size == 0) throw std::length_error("Priority queue is empty.");
-    return heap[0];
+    return (*this)[0];
 }
 
 template <typename Data>
@@ -108,7 +107,7 @@ void PQHeap<Data>::Insert(const Data &data)
 }
 
 template <typename Data>
-void PQHeap<Data>::Insert(Data &&data) noexcept
+void PQHeap<Data>::Insert(Data &&data)
 {
     if (size == capacity) Expand();
     heap[size] = std::move(data);

@@ -66,17 +66,20 @@ public:
   /* ************************************************************************ */
 
   // Specific member functions (inherited from PQ)
+
   virtual inline const Data & Tip() const override; // Override PQ member (must throw std::length_error when empty)
   virtual void RemoveTip() override; // Override PQ member (must throw std::length_error when empty)
   virtual Data TipNRemove() override; // Override PQ member (must throw std::length_error when empty)
 
   virtual void Insert(const Data &) override; // Override PQ member (Copy of the value)
-  virtual void Insert(Data &&) noexcept override; // Override PQ member (Move of the value)
+  virtual void Insert(Data &&) override; // Override PQ member (Move of the value)
 
   virtual void Change(const ulong, const Data &) override; // Override PQ member (Copy of the value) 
   virtual void Change(const ulong, Data &&) override; // Override PQ member (Move of the value)
 
-  // Inherityed member functions (inherited from LinearContainer)
+
+  // Specific member functions (inherited from LinearContainer)
+
   virtual void Clear() override;
   virtual inline const Data & operator[](const ulong) const override;
 

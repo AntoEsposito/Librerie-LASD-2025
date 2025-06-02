@@ -25,13 +25,14 @@ public:
 
   // Destructor
   virtual ~PQ() = default;
+
   /* ************************************************************************ */
 
   // Copy assignment
   PQ & operator=(const PQ &) = delete; // Copy assignment of abstract types is not possible.
 
   // Move assignment
-  PQ & operator=(PQ &&) = delete; // Move assignment of abstract types is not possible.
+  PQ & operator=(PQ &&) noexcept = delete; // Move assignment of abstract types is not possible.
 
   /* ************************************************************************ */
 

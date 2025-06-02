@@ -50,7 +50,7 @@ public:
   /* ************************************************************************ */
 
   // Destructor
-  ~HeapVec() = default;
+  virtual ~HeapVec() = default;
 
   /* ************************************************************************ */
 
@@ -81,9 +81,9 @@ public:
   virtual void Sort() override; // Override SortableLinearContainer member
   
   // Heapify functions
-  virtual void HeapifySize(ulong);
-  virtual void HeapifyDown(ulong, ulong);
-  virtual void HeapifyUp(ulong, ulong);
+  void HeapifySize(ulong heapsize);
+  void HeapifyDown(ulong index, ulong heapsize);
+  void HeapifyUp(ulong index, ulong heapsize);
 
 protected:
 
