@@ -79,13 +79,15 @@ public:
   // Specific member function (inherited from SortableLinearContainer)
 
   virtual void Sort() override; // Override SortableLinearContainer member
-
-  void HeapifyAt(ulong , ulong); // for pqheap
-  void HeapifyFromSize(ulong); // for pqheap
+  
+  // Heapify functions
+  virtual void HeapifySize(ulong);
+  virtual void HeapifyDown(ulong, ulong);
+  virtual void HeapifyUp(ulong, ulong);
 
 protected:
 
-  virtual void Heapify(ulong, ulong); // index, heapsize
+  void Heapify(ulong, ulong); // index, heapsize
 
 };
 

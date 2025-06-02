@@ -21,7 +21,7 @@ int main()
     std::cin >> choice;
 
     if (choice == '1') lasdtest();
-    else if (choice == '2') mytest();
+    else if (choice == '2') mylasdtest::mytest();
     else break;
   }
   std::cout << "Thank you for using my libraries!" << std::endl;

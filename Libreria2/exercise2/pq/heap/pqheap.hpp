@@ -26,7 +26,7 @@ protected:
   using Container::size;
 
   HeapVec<Data> heap{10};
-  ulong capacity = 10; // Size of the heap
+  ulong capacity = 10; // default capacity (size of the heap)
 
 
   // ...

@@ -10,6 +10,7 @@ using namespace std;
 
 /* ************************************************************************** */
 
+namespace mylasdtest {
 void mytest() 
 {
   cout << endl << "~*~#~*~ Welcome to my LASD Test Suite! ~*~#~*~ " << endl;
@@ -28,4 +29,5 @@ void mytest()
   cout << endl << "MyTest (Errors/Tests: " << stesterr << "/" << stestnum << ")";
 
   cout << endl << "Goodbye!" << endl;
+}
 }

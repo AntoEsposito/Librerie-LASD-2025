@@ -24,6 +24,7 @@ using namespace std;
 
 /* ************************************************************************** */
 
+namespace mylasdtest {
 // testSetInt test
 
 void mytestSetInt(lasd::Set<int> & set, uint & testnum, uint & testerr) {
@@ -553,4 +554,6 @@ void MyFullTest1B(uint & testnum, uint & testerr) {
     mytestSetFloat(testnum, testerr);
     mytestSetString(testnum, testerr);
     cout << endl << "My test for Sets (Errors/Tests: " << testerr << "/" << testnum << ")" << endl;
+}
+
 }

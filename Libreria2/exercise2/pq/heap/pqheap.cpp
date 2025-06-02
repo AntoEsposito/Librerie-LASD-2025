@@ -74,22 +74,24 @@ const Data & PQHeap<Data>::Tip() const
 template <typename Data>
 void PQHeap<Data>::RemoveTip()
 {
-    if (size == 0) throw std::length_error("Heap is empty");
+    if (size == 0) throw std::length_error("Priority queue is empty");
+
     std::swap(heap[0], heap[size-1]);
     size--;
-    heap.HeapifyAt(0, size);
+    heap.HeapifyDown(0, size);
+
     if (size < capacity / 4) Reduce();
 }
 
 template <typename Data>
 Data PQHeap<Data>::TipNRemove()
 { 
-    if (size == 0) throw std::length_error("Heap is empty");
+    if (size == 0) throw std::length_error("Priority queue is empty");
     Data toReturn = heap[0];
 
     std::swap(heap[0], heap[size-1]);
     size--;
-    heap.HeapifyAt(0, size);
+    heap.HeapifyDown(0, size);
     if (size < capacity / 4) Reduce();
 
     return toReturn;
@@ -102,7 +104,7 @@ void PQHeap<Data>::Insert(const Data &data)
     heap[size] = data;
     size++;
     
-    heap.HeapifyFromSize(size);
+    heap.HeapifyUp(size-1, size);
 }
 
 template <typename Data>
@@ -112,7 +114,7 @@ void PQHeap<Data>::Insert(Data &&data) noexcept
     heap[size] = std::move(data);
     size++;
 
-    heap.HeapifyFromSize(size);
+    heap.HeapifyUp(size-1, size);
 }
 
 template <typename Data>
@@ -120,7 +122,7 @@ void PQHeap<Data>::Change(const ulong index, const Data &newData)
 {
     if (index >= size) throw std::out_of_range("Index out of range");
     heap[index] = newData;
-    heap.HeapifyFromSize(size);
+    heap.HeapifySize(size);
 }
 
 template <typename Data>
@@ -128,7 +130,7 @@ void PQHeap<Data>::Change(const ulong index, Data &&newData)
 {
     if (index >= size) throw std::out_of_range("Index out of range");
     heap[index] = std::move(newData);
-    heap.HeapifyFromSize(size);
+    heap.HeapifySize(size);
 }
 
 
@@ -145,6 +147,7 @@ void PQHeap<Data>::Clear()
 template <typename Data>
 const Data & PQHeap<Data>::operator[](const ulong index) const
 {
+    if (index >= size) throw std::out_of_range("PQHeap: invalid index.");
     return heap[index];
 }
 
@@ -155,7 +158,7 @@ template <typename Data>
 void PQHeap<Data>::Expand()
 {
     capacity *= 2;
-    if (capacity == 0) capacity = 10;
+    if (capacity < 10) capacity = 10;
     heap.Resize(capacity);
 }
 

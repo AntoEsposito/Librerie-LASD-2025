@@ -13,6 +13,7 @@
 
 using namespace std;
 
+namespace mylasdtest {
 
 // Vector Tests
 
@@ -728,4 +729,6 @@ void MyFullTest1A(unsigned int & testnum, unsigned int & testerr){
     testnum += loctestnum;
     testerr += loctesterr;
     cout << endl << "My test (Vector and Lists) (Errors/Tests: " << testerr << "/" << testnum << ")" << endl;
+}
+
 }
