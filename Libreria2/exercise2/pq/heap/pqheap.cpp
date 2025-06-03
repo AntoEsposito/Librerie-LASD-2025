@@ -67,6 +67,7 @@ PQHeap<Data> & PQHeap<Data>::operator=(PQHeap<Data> &&toAssign) noexcept
 template <typename Data>
 const Data & PQHeap<Data>::Tip() const
 {
+    if (size == 0) throw std::length_error("Priority queue is empty");
     return (*this)[0];
 }
 

@@ -1,6 +1,8 @@
 #include "test.hpp"
 #include "myvectorlist.cpp"
 #include "myset.cpp"
+#include "myheap.cpp"
+#include "mypqheap.cpp"
 
 /* ************************************************************************** */
 
@@ -25,6 +27,14 @@ void mytest()
   loctestnum = 0; loctesterr = 0;
   MyFullTest1B(loctestnum, loctesterr);
   stestnum += loctestnum; stesterr += loctesterr;
+
+  loctestnum = 0; loctesterr = 0;
+  MyFullTest2A(loctestnum, loctesterr);
+  stestnum += loctestnum; stesterr += loctesterr;
+
+  // loctestnum = 0; loctesterr = 0;
+  // MyFullTest2B(loctestnum, loctesterr);
+  // stestnum += loctestnum; stesterr += loctesterr;
 
   cout << endl << "MyTest (Errors/Tests: " << stesterr << "/" << stestnum << ")";
 

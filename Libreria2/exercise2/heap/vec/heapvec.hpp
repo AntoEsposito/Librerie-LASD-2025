@@ -36,6 +36,7 @@ public:
   /* ************************************************************************ */
 
   // Specific constructors
+  HeapVec(const ulong u): SortableVector<Data>(u) {}; // A heap with a given initial dimension
   HeapVec(const TraversableContainer<Data> &); // A heap obtained from a TraversableContainer
   HeapVec(MappableContainer<Data> &&) noexcept; // A heap obtained from a MappableContainer
 
