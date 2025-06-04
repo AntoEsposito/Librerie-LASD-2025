@@ -67,11 +67,11 @@ void TestPQInt(uint & testnum, uint & testerr)
         GetAt(loctestnum, loctesterr, pq, true, 0, 100);
         GetAt(loctestnum, loctesterr, pq, false, 10, 0);
         
-        Change(loctestnum, loctesterr, pq, 0, 10);
+        Change(loctestnum, loctesterr, pq, true, 0, 10);
         Tip(loctestnum, loctesterr, pq, true, 42);
         
         uint size = pq.Size();
-        Change(loctestnum, loctesterr, pq, size-1, 200);
+        Change(loctestnum, loctesterr, pq, true, size-1, 200);
         Tip(loctestnum, loctesterr, pq, true, 200);
         
         lasd::PQHeap<int> pq_copy(pq);
@@ -147,10 +147,10 @@ void TestPQInt(uint & testnum, uint & testerr)
         Insert(loctestnum, loctesterr, prop_pq, 25);
         Insert(loctestnum, loctesterr, prop_pq, 30);
         
-        Change(loctestnum, loctesterr, prop_pq, 3, 150);
+        Change(loctestnum, loctesterr, prop_pq, true, 3, 150);
         Tip(loctestnum, loctesterr, prop_pq, true, 150);
         
-        Change(loctestnum, loctesterr, prop_pq, 0, 10);
+        Change(loctestnum, loctesterr, prop_pq, true, 0, 10);
         Tip(loctestnum, loctesterr, prop_pq, true, 100);
         
         lasd::PQHeap<int> alt_pq;
@@ -234,11 +234,11 @@ void TestPQDouble(uint & testnum, uint & testerr) {
         GetAt(loctestnum, loctesterr, pq, true, 0, 150.5);
         GetAt(loctestnum, loctesterr, pq, false, 20, 0.0);
         
-        Change(loctestnum, loctesterr, pq, 0, 10.5);
+        Change(loctestnum, loctesterr, pq, true, 0, 10.5);
         Tip(loctestnum, loctesterr, pq, true, 77.777);
         
         uint size = pq.Size();
-        Change(loctestnum, loctesterr, pq, size-1, 300.789);
+        Change(loctestnum, loctesterr, pq, true, size-1, 300.789);
         Tip(loctestnum, loctesterr, pq, true, 300.789);
         
         lasd::PQHeap<double> pq_copy(pq);
@@ -381,10 +381,10 @@ void TestPQString(uint & testnum, uint & testerr) {
         GetAt(loctestnum, loctesterr, pq, true, 0, string("zzz"));
         GetAt(loctestnum, loctesterr, pq, false, 25, string(""));
         
-        Change(loctestnum, loctesterr, pq, 0, string("k"));
+        Change(loctestnum, loctesterr, pq, true, 0, string("k"));
         
         uint size = pq.Size();
-        Change(loctestnum, loctesterr, pq, size-1, string("zzzz"));
+        Change(loctestnum, loctesterr, pq, true, size-1, string("zzzz"));
         
         lasd::PQHeap<string> pq_copy(pq);
         EqualLinear(loctestnum, loctesterr, pq, pq_copy, true);
