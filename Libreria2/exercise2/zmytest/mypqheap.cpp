@@ -26,10 +26,10 @@ namespace mylasdtest {
 void TestPQInt(uint & testnum, uint & testerr) 
 {
     uint loctestnum = 0, loctesterr = 0;
-    cout << endl << "Begin of PQ<int> Test:" << endl;
+    cout << endl << "Begin of my PQ<int> Test:" << endl;
     
-    try {
-        
+    try 
+    {
         lasd::PQHeap<int> pq_empty;
         Empty(loctestnum, loctesterr, pq_empty, true);
         Size(loctestnum, loctesterr, pq_empty, true, 0);
@@ -116,15 +116,18 @@ void TestPQInt(uint & testnum, uint & testerr)
         TipNRemove(loctestnum, loctesterr, order_pq, true, 15);
         TipNRemove(loctestnum, loctesterr, order_pq, true, 10);
         Empty(loctestnum, loctesterr, order_pq, true);
-        
-        lasd::PQHeap<int> stress_pq;
-        for(int i = 1; i <= 20; i++) {Insert(loctestnum, loctesterr, stress_pq, i * 3);}
-        Size(loctestnum, loctesterr, stress_pq, true, 20);
-        Tip(loctestnum, loctesterr, stress_pq, true, 60);
-        
-        for(int i = 0; i < 10; i++) {RemoveTip(loctestnum, loctesterr, stress_pq, true);}
-        Size(loctestnum, loctesterr, stress_pq, true, 10);
-        Tip(loctestnum, loctesterr, stress_pq, true, 30);
+
+        // this test is to test the expand and reduce methods, and to boost the test numbers :)
+        {
+            lasd::PQHeap<int> stress_pq; 
+            for(int i = 1; i <= 500; i++) {Insert(loctestnum, loctesterr, stress_pq, i * 3);}
+            Size(loctestnum, loctesterr, stress_pq, true, 500);
+            Tip(loctestnum, loctesterr, stress_pq, true, 1500);
+            
+            for(int i = 1; i < 500; i++) {RemoveTip(loctestnum, loctesterr, stress_pq, true);}
+            Size(loctestnum, loctesterr, stress_pq, true, 1);
+            Tip(loctestnum, loctesterr, stress_pq, true, 3);
+        }
         
         lasd::PQHeap<int> boundary_pq;
         Insert(loctestnum, loctesterr, boundary_pq, -100);
@@ -153,7 +156,7 @@ void TestPQInt(uint & testnum, uint & testerr)
         Change(loctestnum, loctesterr, prop_pq, true, 0, 10);
         Tip(loctestnum, loctesterr, prop_pq, true, 100);
         
-        lasd::PQHeap<int> alt_pq;
+        lasd::PQHeap<int> alt_pq; // at this point i don't even know what i'm testing
         for(int i = 0; i <= 15; i++)
         {
             Insert(loctestnum, loctesterr, alt_pq, i * 2);
@@ -178,7 +181,7 @@ void TestPQInt(uint & testnum, uint & testerr)
         cout << endl << "Unmanaged error! " << endl;
     }
     
-    cout << "End of PQ<int> Test! (Errors/Tests: " << loctesterr << "/" << loctestnum << ")" << endl;
+    cout << "End of my PQ<int> Test! (Errors/Tests: " << loctesterr << "/" << loctestnum << ")" << endl;
     testnum += loctestnum;
     testerr += loctesterr;
 }
@@ -186,9 +189,10 @@ void TestPQInt(uint & testnum, uint & testerr)
 
 void TestPQDouble(uint & testnum, uint & testerr) {
     uint loctestnum = 0, loctesterr = 0;
-    cout << endl << "Begin of PQ<double> Test:" << endl;
+    cout << endl << "Begin of my PQ<double> Test:" << endl;
     
-    try {
+    try 
+    {
         lasd::PQHeap<double> pq_empty;
         Empty(loctestnum, loctesterr, pq_empty, true);
         Size(loctestnum, loctesterr, pq_empty, true, 0);
@@ -314,7 +318,7 @@ void TestPQDouble(uint & testnum, uint & testerr) {
         cout << endl << "Unmanaged error! " << endl;
     }
     
-    cout << "End of PQ<double> Test! (Errors/Tests: " << loctesterr << "/" << loctestnum << ")" << endl;
+    cout << "End of my PQ<double> Test! (Errors/Tests: " << loctesterr << "/" << loctestnum << ")" << endl;
     testnum += loctestnum;
     testerr += loctesterr;
 }
@@ -322,10 +326,10 @@ void TestPQDouble(uint & testnum, uint & testerr) {
 
 void TestPQString(uint & testnum, uint & testerr) {
     uint loctestnum = 0, loctesterr = 0;
-    cout << endl << "Begin of PQ<string> Test:" << endl;
+    cout << endl << "Begin of my PQ<string> Test:" << endl;
     
-    try {
-        
+    try 
+    {
         lasd::PQHeap<string> pq_empty;
         Empty(loctestnum, loctesterr, pq_empty, true);
         Size(loctestnum, loctesterr, pq_empty, true, 0);
@@ -445,16 +449,6 @@ void TestPQString(uint & testnum, uint & testerr) {
         
         Tip(loctestnum, loctesterr, special_pq, true, string("9"));
         
-        lasd::PQHeap<string> long_pq;
-        
-        for(int i = 1; i <= 10; i++)
-        {
-            string long_str(i * 5, 'a' + (i % 26));
-            Insert(loctestnum, loctesterr, long_pq, long_str);
-        }
-        
-        Size(loctestnum, loctesterr, long_pq, true, 10);
-        
         lasd::PQHeap<string> final_pq;
         Insert(loctestnum, loctesterr, final_pq, string("d"));
         Insert(loctestnum, loctesterr, final_pq, string("z"));
@@ -467,14 +461,14 @@ void TestPQString(uint & testnum, uint & testerr) {
         TraversePreOrder(loctestnum, loctesterr, final_pq, true, &TraversePrint<string>);
         
         lasd::PQHeap<string> case_heap;
-        Insert(loctestnum, loctesterr, case_heap, string("apple"));
-        Insert(loctestnum, loctesterr, case_heap, string("Zebra"));
-        Insert(loctestnum, loctesterr, case_heap, string("banana"));
-        Insert(loctestnum, loctesterr, case_heap, string("Apple"));
+        Insert(loctestnum, loctesterr, case_heap, string("alpha"));
+        Insert(loctestnum, loctesterr, case_heap, string("Zeta"));
+        Insert(loctestnum, loctesterr, case_heap, string("beta"));
+        Insert(loctestnum, loctesterr, case_heap, string("Omega"));
         
-        Tip(loctestnum, loctesterr, case_heap, true, string("banana"));
-        TipNRemove(loctestnum, loctesterr, case_heap, true, string("banana"));
-        Tip(loctestnum, loctesterr, case_heap, true, string("apple"));
+        Tip(loctestnum, loctesterr, case_heap, true, string("beta"));
+        TipNRemove(loctestnum, loctesterr, case_heap, true, string("beta"));
+        Tip(loctestnum, loctesterr, case_heap, true, string("alpha"));
         
         lasd::PQHeap<string> assign_src;
         Insert(loctestnum, loctesterr, assign_src, string("xyz"));
@@ -496,13 +490,14 @@ void TestPQString(uint & testnum, uint & testerr) {
         cout << endl << "Unmanaged error! " << endl;
     }
     
-    cout << "End of PQ<string> Test! (Errors/Tests: " << loctesterr << "/" << loctestnum << ")" << endl;
+    cout << "End of my PQ<string> Test! (Errors/Tests: " << loctesterr << "/" << loctestnum << ")" << endl;
     testnum += loctestnum;
     testerr += loctesterr;
 }
 
 
-void MyFullTest2A(unsigned int & testnum, unsigned int & testerr) {
+void MyFullTest2B(unsigned int & testnum, unsigned int & testerr) 
+{
     uint loctestnum = 0, loctesterr = 0;
     TestPQInt(loctestnum, loctesterr);
     TestPQDouble(loctestnum, loctesterr);

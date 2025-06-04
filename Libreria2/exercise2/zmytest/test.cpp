@@ -32,9 +32,9 @@ void mytest()
   MyFullTest2A(loctestnum, loctesterr);
   stestnum += loctestnum; stesterr += loctesterr;
 
-  // loctestnum = 0; loctesterr = 0;
-  // MyFullTest2B(loctestnum, loctesterr);
-  // stestnum += loctestnum; stesterr += loctesterr;
+  loctestnum = 0; loctesterr = 0;
+  MyFullTest2B(loctestnum, loctesterr);
+  stestnum += loctestnum; stesterr += loctesterr;
 
   cout << endl << "MyTest (Errors/Tests: " << stesterr << "/" << stestnum << ")";
 
