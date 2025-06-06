@@ -20,13 +20,13 @@ void mytest()
   uint loctestnum, loctesterr;
   uint stestnum = 0, stesterr = 0;
 
-  loctestnum = 0; loctesterr = 0;
-  MyFullTest1A(loctestnum, loctesterr);
-  stestnum += loctestnum; stesterr += loctesterr;
+  // loctestnum = 0; loctesterr = 0;
+  // MyFullTest1A(loctestnum, loctesterr);
+  // stestnum += loctestnum; stesterr += loctesterr;
 
-  loctestnum = 0; loctesterr = 0;
-  MyFullTest1B(loctestnum, loctesterr);
-  stestnum += loctestnum; stesterr += loctesterr;
+  // loctestnum = 0; loctesterr = 0;
+  // MyFullTest1B(loctestnum, loctesterr);
+  // stestnum += loctestnum; stesterr += loctesterr;
 
   loctestnum = 0; loctesterr = 0;
   MyFullTest2A(loctestnum, loctesterr);

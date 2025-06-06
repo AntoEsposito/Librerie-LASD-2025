@@ -33,9 +33,7 @@ void TestHeapInt(uint & testnum, uint & testerr)
         Empty(loctestnum, loctesterr, emptyHeap, true);
         Size(loctestnum, loctesterr, emptyHeap, true, 0);
         
-        // Test sorting empty heap (should not crash)
         emptyHeap.Sort();
-        // Test heapify empty heap
         emptyHeap.Heapify();
 
         lasd::Vector<int> singleVec(1);

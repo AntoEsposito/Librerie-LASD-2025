@@ -74,11 +74,7 @@ void HeapVec<Data>::Heapify()
 {
     if (size <= 1) return;
 
-    for (ulong i = (size / 2) - 1; i >= 0; i--) 
-    {
-        Heapify(i, size);
-        if (i == 0) break; // Prevents underflow of index i
-    }
+    for (long i = (size / 2) - 1; i >= 0; i--) {HeapifyDown(i, size);}
 }
 
 
@@ -94,24 +90,13 @@ void HeapVec<Data>::Sort() // HeapSort
     {
         std::swap(elements[0], elements[i]);
         heapSize--;
-        Heapify(0, heapSize);
+        HeapifyDown(0, heapSize);
     }
 }
 
 
-// public heapify functions
+// auxiliary functions
 
-template <typename Data>
-void HeapVec<Data>::HeapifySize(ulong heapsize) 
-{
-    if (heapsize <= 1) return;
-    
-    for (ulong i = (heapsize / 2) - 1; i >= 0; i--) 
-    {
-        Heapify(i, heapsize);
-        if (i == 0) break; // Prevents underflow of index i
-    }
-}
 template <typename Data>
 void HeapVec<Data>::HeapifyDown(ulong index, ulong heapsize) 
 {
@@ -129,6 +114,7 @@ void HeapVec<Data>::HeapifyDown(ulong index, ulong heapsize)
         HeapifyDown(max, heapsize);
     }
 }
+
 template <typename Data>
 void HeapVec<Data>::HeapifyUp(ulong index, ulong heapsize) 
 {
@@ -143,25 +129,12 @@ void HeapVec<Data>::HeapifyUp(ulong index, ulong heapsize)
     }
 }
 
-
-// auxiliary functions
-
 template <typename Data>
-void HeapVec<Data>::Heapify(ulong index, ulong heapSize)
+void HeapVec<Data>::HeapifySize(ulong heapsize) 
 {
-    ulong max = index;
-    ulong left = 2 * index + 1;
-    ulong right = 2 * index + 2;
-
-    if (left < heapSize && elements[left] > elements[max]) max = left;
-
-    if (right < heapSize && elements[right] > elements[max]) max = right;
-
-    if (max != index)
-    {
-        std::swap(elements[index], elements[max]);
-        Heapify(max, heapSize);
-    }
+    if (heapsize <= 1) return;
+    
+    for (long i = (heapsize / 2) - 1; i >= 0; i--) {HeapifyDown(i, heapsize);}
 }
 
 

@@ -26,15 +26,13 @@ protected:
   using Container::size;
 
   HeapVec<Data> heap;
-  ulong capacity; // default capacity (size of the heap)
-
 
   // ...
 
 public:
 
   // Default constructor
-  PQHeap(): heap(10) {capacity = 10;}
+  PQHeap(): heap(10) {}
 
   /* ************************************************************************ */
 

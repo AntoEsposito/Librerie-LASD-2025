@@ -7,15 +7,13 @@ namespace lasd {
 template <typename Data>
 PQHeap<Data>::PQHeap(const TraversableContainer<Data> &traversableC): heap(traversableC)
 {
-    size = heap.Size();
-    capacity = size;
+    size = heap.size;
 }
 
 template <typename Data>
 PQHeap<Data>::PQHeap(MappableContainer<Data> &&mappableC) noexcept: heap(std::move(mappableC))
 {
-    size = heap.Size();
-    capacity = size;
+    size = heap.size;
 }
 
 
@@ -25,14 +23,12 @@ template <typename Data>
 PQHeap<Data>::PQHeap(const PQHeap<Data> &toCopy): heap(toCopy.heap)
 {
     size = toCopy.size;
-    capacity = toCopy.capacity;
 }
 
 template <typename Data>
 PQHeap<Data>::PQHeap(PQHeap<Data> &&toMove) noexcept: heap(std::move(toMove.heap))
 {
     std::swap(size, toMove.size);
-    std::swap(capacity, toMove.capacity);
 }
 
 // copy & move assignment
@@ -44,7 +40,6 @@ PQHeap<Data> & PQHeap<Data>::operator=(const PQHeap<Data> &toAssign)
     {
         heap = toAssign.heap;
         size = toAssign.size;
-        capacity = toAssign.capacity;
     }
     return *this;
 }
@@ -56,7 +51,6 @@ PQHeap<Data> & PQHeap<Data>::operator=(PQHeap<Data> &&toAssign) noexcept
     {
         heap = std::move(toAssign.heap);
         std::swap(size, toAssign.size);
-        std::swap(capacity, toAssign.capacity);
     }
     return *this;
 }
@@ -80,7 +74,7 @@ void PQHeap<Data>::RemoveTip()
     size--;
     heap.HeapifyDown(0, size);
 
-    if (size < capacity / 4) Reduce();
+    if (size < heap.size / 4) Reduce();
 }
 
 template <typename Data>
@@ -92,7 +86,7 @@ Data PQHeap<Data>::TipNRemove()
     std::swap(heap[0], heap[size-1]);
     size--;
     heap.HeapifyDown(0, size);
-    if (size < capacity / 4) Reduce();
+    if (size < heap.size / 4) Reduce();
 
     return toReturn;
 }
@@ -100,7 +94,7 @@ Data PQHeap<Data>::TipNRemove()
 template <typename Data>
 void PQHeap<Data>::Insert(const Data &data)
 {
-    if (size == capacity) Expand();
+    if (size == heap.size) Expand();
     heap[size] = data;
     size++;
     
@@ -110,7 +104,7 @@ void PQHeap<Data>::Insert(const Data &data)
 template <typename Data>
 void PQHeap<Data>::Insert(Data &&data)
 {
-    if (size == capacity) Expand();
+    if (size == heap.size) Expand();
     heap[size] = std::move(data);
     size++;
 
@@ -140,7 +134,6 @@ template <typename Data>
 void PQHeap<Data>::Clear()
 {
     size = 0;
-    capacity = 0;
     heap.Clear();
 }
 
@@ -157,9 +150,9 @@ const Data & PQHeap<Data>::operator[](const ulong index) const
 template <typename Data>
 void PQHeap<Data>::Expand()
 {
-    capacity *= 2;
-    if (capacity < 10) capacity = 10;
-    heap.Resize(capacity);
+    ulong newCapacity = heap.size * 2;
+    if (newCapacity < 10) newCapacity = 10;
+    heap.Resize(newCapacity);
 }
 
 template <typename Data>
@@ -167,8 +160,7 @@ void PQHeap<Data>::Reduce()
 {
     ulong newCapacity = size * 2;
     if (newCapacity < 10) newCapacity = 10;
-    capacity = newCapacity;
-    heap.Resize(capacity);
+    heap.Resize(newCapacity);
 }
 
 /* ************************************************************************** */

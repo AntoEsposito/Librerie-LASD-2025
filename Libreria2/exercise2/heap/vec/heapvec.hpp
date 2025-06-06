@@ -10,6 +10,9 @@
 
 namespace lasd {
 
+template <typename Data>
+class PQHeap;
+
 /* ************************************************************************** */
 
 template <typename Data>
@@ -30,13 +33,15 @@ protected:
 
 public:
 
+  friend class PQHeap<Data>; // Allow PQHeap to access protected members
+  
   // Default constructor
   HeapVec() = default;
 
   /* ************************************************************************ */
 
   // Specific constructors
-  HeapVec(const ulong u): SortableVector<Data>(u) {}; // A heap with a given initial dimension
+  HeapVec(const ulong s): SortableVector<Data>(s) {}; // A heap with a given initial dimension
   HeapVec(const TraversableContainer<Data> &); // A heap obtained from a TraversableContainer
   HeapVec(MappableContainer<Data> &&) noexcept; // A heap obtained from a MappableContainer
 
@@ -81,14 +86,12 @@ public:
 
   virtual void Sort() override; // Override SortableLinearContainer member
   
-  // Heapify functions
-  void HeapifySize(ulong heapsize);
-  void HeapifyDown(ulong index, ulong heapsize);
-  void HeapifyUp(ulong index, ulong heapsize);
 
 protected:
 
-  void Heapify(ulong, ulong); // index, heapsize
+  void HeapifyDown(ulong index, ulong heapsize);
+  void HeapifyUp(ulong index, ulong heapsize);
+  void HeapifySize(ulong heapsize);
 
 };
 
