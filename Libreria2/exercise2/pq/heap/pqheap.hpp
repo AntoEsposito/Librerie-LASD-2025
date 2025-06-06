@@ -13,7 +13,7 @@ namespace lasd {
 /* ************************************************************************** */
 
 template <typename Data>
-class PQHeap: virtual public PQ<Data> {
+class PQHeap: virtual public PQ<Data>, protected HeapVec<Data> {
   // Must extend PQ<Data>,
   // Could extend HeapVec<Data>
 
@@ -24,15 +24,14 @@ private:
 protected:
 
   using Container::size;
+  ulong capacity = 0; // Default capacity for the heap vector
 
-  HeapVec<Data> heap;
-
-  // ...
+  using Vector<Data>::elements;
 
 public:
 
   // Default constructor
-  PQHeap(): heap(10) {}
+  PQHeap(): HeapVec<Data>(10) {size = 0; capacity = 10;}
 
   /* ************************************************************************ */
 
@@ -76,17 +75,10 @@ public:
   virtual void Change(const ulong, Data &&) override; // Override PQ member (Move of the value)
 
 
-  // Specific member functions (inherited from LinearContainer)
-
-  virtual void Clear() override;
-  virtual inline const Data & operator[](const ulong) const override;
 
 protected:
 
-  // Auxiliary functions, if necessary!
-
-  void Expand();
-  void Reduce();
+  virtual void Resize(ulong) override; // Override ResizableContainer member
 
 };
 

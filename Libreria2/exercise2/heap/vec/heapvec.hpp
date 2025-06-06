@@ -10,8 +10,6 @@
 
 namespace lasd {
 
-template <typename Data>
-class PQHeap;
 
 /* ************************************************************************** */
 
@@ -32,8 +30,6 @@ protected:
   // ...
 
 public:
-
-  friend class PQHeap<Data>; // Allow PQHeap to access protected members
   
   // Default constructor
   HeapVec() = default;
@@ -90,9 +86,7 @@ public:
 protected:
 
   void HeapifyDown(ulong index, ulong heapsize);
-  void HeapifyUp(ulong index, ulong heapsize);
-  void HeapifySize(ulong heapsize);
-
+  void HeapifyUp(ulong index);
 };
 
 /* ************************************************************************** */

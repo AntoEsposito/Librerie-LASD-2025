@@ -116,25 +116,17 @@ void HeapVec<Data>::HeapifyDown(ulong index, ulong heapsize)
 }
 
 template <typename Data>
-void HeapVec<Data>::HeapifyUp(ulong index, ulong heapsize) 
+void HeapVec<Data>::HeapifyUp(ulong index) 
 {
-    if (index >= heapsize || index == 0) return;
+    if (index == 0) return;
     
     ulong parent = (index - 1) / 2;
     
     if (elements[index] > elements[parent])
     {
         std::swap(elements[index], elements[parent]);
-        HeapifyUp(parent, heapsize);
+        HeapifyUp(parent);
     }
-}
-
-template <typename Data>
-void HeapVec<Data>::HeapifySize(ulong heapsize) 
-{
-    if (heapsize <= 1) return;
-    
-    for (long i = (heapsize / 2) - 1; i >= 0; i--) {HeapifyDown(i, heapsize);}
 }
 
 

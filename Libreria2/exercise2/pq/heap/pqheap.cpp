@@ -5,53 +5,48 @@ namespace lasd {
 // specific constructors
 
 template <typename Data>
-PQHeap<Data>::PQHeap(const TraversableContainer<Data> &traversableC): heap(traversableC)
+PQHeap<Data>::PQHeap(const TraversableContainer<Data> &traversableC): HeapVec<Data>(traversableC)
 {
-    size = heap.size;
+    capacity = size;
 }
 
 template <typename Data>
-PQHeap<Data>::PQHeap(MappableContainer<Data> &&mappableC) noexcept: heap(std::move(mappableC))
+PQHeap<Data>::PQHeap(MappableContainer<Data> &&mappableC) noexcept: HeapVec<Data>(std::move(mappableC))
 {
-    size = heap.size;
+    capacity = size;
 }
 
 
 // copy & move constructors
 
 template <typename Data>
-PQHeap<Data>::PQHeap(const PQHeap<Data> &toCopy): heap(toCopy.heap)
+PQHeap<Data>::PQHeap(const PQHeap<Data> &toCopy): HeapVec<Data>(toCopy)
 {
-    size = toCopy.size;
+    capacity = toCopy.capacity;
 }
 
 template <typename Data>
-PQHeap<Data>::PQHeap(PQHeap<Data> &&toMove) noexcept: heap(std::move(toMove.heap))
+PQHeap<Data>::PQHeap(PQHeap<Data> &&toMove) noexcept: HeapVec<Data>(std::move(toMove))
 {
-    std::swap(size, toMove.size);
+    std::swap(capacity, toMove.capacity);
 }
+
 
 // copy & move assignment
 
 template <typename Data>
 PQHeap<Data> & PQHeap<Data>::operator=(const PQHeap<Data> &toAssign)
 {
-    if (this != &toAssign) 
-    {
-        heap = toAssign.heap;
-        size = toAssign.size;
-    }
+    HeapVec<Data>::operator=(toAssign);
+    capacity = toAssign.capacity;
     return *this;
 }
 
 template <typename Data>
 PQHeap<Data> & PQHeap<Data>::operator=(PQHeap<Data> &&toAssign) noexcept
 {
-    if (this != &toAssign)
-    {
-        heap = std::move(toAssign.heap);
-        std::swap(size, toAssign.size);
-    }
+    HeapVec<Data>::operator=(std::move(toAssign));
+    capacity = std::move(toAssign.capacity);
     return *this;
 }
 
@@ -62,7 +57,7 @@ template <typename Data>
 const Data & PQHeap<Data>::Tip() const
 {
     if (size == 0) throw std::length_error("Priority queue is empty");
-    return (*this)[0];
+    return elements[0];
 }
 
 template <typename Data>
@@ -70,97 +65,81 @@ void PQHeap<Data>::RemoveTip()
 {
     if (size == 0) throw std::length_error("Priority queue is empty");
 
-    std::swap(heap[0], heap[size-1]);
+    std::swap(elements[0], elements[size-1]);
     size--;
-    heap.HeapifyDown(0, size);
+    HeapVec<Data>::HeapifyDown(0, size);
 
-    if (size < heap.size / 4) Reduce();
+    if (size < capacity / 4) Resize(size * 2);
 }
 
 template <typename Data>
 Data PQHeap<Data>::TipNRemove()
 { 
     if (size == 0) throw std::length_error("Priority queue is empty");
-    Data toReturn = heap[0];
 
-    std::swap(heap[0], heap[size-1]);
+    Data toReturn = elements[0];
+    std::swap(elements[0], elements[size-1]);
     size--;
-    heap.HeapifyDown(0, size);
-    if (size < heap.size / 4) Reduce();
+    HeapVec<Data>::HeapifyDown(0, size);
 
+    if (size < capacity / 4) Resize(size * 2);
     return toReturn;
 }
 
 template <typename Data>
 void PQHeap<Data>::Insert(const Data &data)
 {
-    if (size == heap.size) Expand();
-    heap[size] = data;
+    if (size == capacity) Resize(capacity * 2);
+    elements[size] = data;
     size++;
     
-    heap.HeapifyUp(size-1, size);
+    HeapVec<Data>::HeapifyUp(size-1);
 }
 
 template <typename Data>
 void PQHeap<Data>::Insert(Data &&data)
 {
-    if (size == heap.size) Expand();
-    heap[size] = std::move(data);
+    if (size == capacity) Resize(capacity * 2);
+    elements[size] = std::move(data);
     size++;
 
-    heap.HeapifyUp(size-1, size);
+    HeapVec<Data>::HeapifyUp(size-1);
 }
 
 template <typename Data>
 void PQHeap<Data>::Change(const ulong index, const Data &newData)
 {
     if (index >= size) throw std::out_of_range("Index out of range");
-    heap[index] = newData;
-    heap.HeapifySize(size);
+    Data oldData = elements[index];
+    elements[index] = newData;
+    
+    if (newData > oldData) HeapVec<Data>::HeapifyUp(index); 
+    else if (newData < oldData) HeapVec<Data>::HeapifyDown(index, size);
 }
 
 template <typename Data>
 void PQHeap<Data>::Change(const ulong index, Data &&newData)
 {
     if (index >= size) throw std::out_of_range("Index out of range");
-    heap[index] = std::move(newData);
-    heap.HeapifySize(size);
-}
-
-
-// Inherited member functions (inherited from LinearContainer)
-
-template <typename Data>
-void PQHeap<Data>::Clear()
-{
-    size = 0;
-    heap.Clear();
-}
-
-template <typename Data>
-const Data & PQHeap<Data>::operator[](const ulong index) const
-{
-    if (index >= size) throw std::out_of_range("PQHeap: invalid index.");
-    return heap[index];
+    Data oldData = elements[index];
+    elements[index] = std::move(newData);
+    
+    if (newData > oldData) HeapVec<Data>::HeapifyUp(index); 
+    else if (newData < oldData) HeapVec<Data>::HeapifyDown(index, size);
 }
 
 
 // auxiliary functions
 
 template <typename Data>
-void PQHeap<Data>::Expand()
+void PQHeap<Data>::Resize(ulong newCapacity)
 {
-    ulong newCapacity = heap.size * 2;
+    ulong oldSize = size;
     if (newCapacity < 10) newCapacity = 10;
-    heap.Resize(newCapacity);
-}
 
-template <typename Data>
-void PQHeap<Data>::Reduce()
-{
-    ulong newCapacity = size * 2;
-    if (newCapacity < 10) newCapacity = 10;
-    heap.Resize(newCapacity);
+    HeapVec<Data>::Resize(newCapacity);
+    capacity = newCapacity;
+    size = oldSize;
 }
 
 /* ************************************************************************** */
