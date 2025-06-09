@@ -128,6 +128,15 @@ void PQHeap<Data>::Change(const ulong index, Data &&newData)
     else if (newData < oldData) HeapVec<Data>::HeapifyDown(index, size);
 }
 
+// Specific member functions (inherited from ClearableContainer)
+
+template <typename Data>
+void PQHeap<Data>::Clear()
+{
+    HeapVec<Data>::Clear();
+    capacity = 0;
+}
+
 
 // auxiliary functions
 

@@ -74,7 +74,9 @@ public:
   virtual void Change(const ulong, const Data &) override; // Override PQ member (Copy of the value) 
   virtual void Change(const ulong, Data &&) override; // Override PQ member (Move of the value)
 
+  // Specific member functions (inherited from ClearableContainer)
 
+  virtual inline void Clear() override; // Override ClearableContainer member
 
 protected:
 
